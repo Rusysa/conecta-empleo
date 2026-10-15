@@ -1,0 +1,18 @@
+{
+  "name": "conecta-empleo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Tablero de empleo con registro, vacantes y seguimiento de postulaciones.",
+  "type": "module",
+  "packageManager": "pnpm@10.34.7",
+  "engines": { "node": ">=24.14.0 <25" },
+  "scripts": {
+    "dev:api": "pnpm --filter @conecta/api dev",
+    "dev:web": "pnpm --filter @conecta/web dev",
+    "build": "pnpm --filter @conecta/web build",
+    "test": "pnpm --filter @conecta/api test",
+    "start:api": "pnpm --filter @conecta/api start"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
