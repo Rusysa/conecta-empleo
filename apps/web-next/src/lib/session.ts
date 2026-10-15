@@ -1,9 +1,13 @@
 import "server-only"
+import { cache } from "react"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import type { Session, User } from "@/lib/auth-types"
 
-export async function getSession(): Promise<Session> {
+/** Verifies the session against the API once per request (navbar, guards and pages share it). */
+export const getSession = cache(loadSession)
+
+async function loadSession(): Promise<Session> {
   const store = await cookies()
   const sessionCookie = store.get("__Host-conecta_session") ?? store.get("conecta_session")
   if (!sessionCookie) return null

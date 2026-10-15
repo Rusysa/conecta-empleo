@@ -24,7 +24,7 @@ Ejecutar también `pnpm dev:api` con PostgreSQL y `apps/api/.env` configurados. 
 
 ## Pantallas incluidas
 
-- `/`: landing con vacantes recientes
+- `/`: landing de presentación (GSAP + Lenis) con vacantes reales, búsqueda y accesos a registro/login; usa su propio nav y footer (`src/components/landing/`, `SiteChrome` oculta los globales)
 - `/vacantes`: listado con búsqueda, filtros (`?q=&ciudad=&modalidad=&page=`) y paginación
 - `/vacantes/[id]`: detalle con botón Aplicar y todos sus estados, metadatos y JSON-LD `JobPosting`
 - `/empresas/[slug]`: perfil público de empresa
