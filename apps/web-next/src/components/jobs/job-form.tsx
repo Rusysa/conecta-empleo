@@ -186,6 +186,9 @@ export function JobForm({ mode, defaultValues, jobId, status }: Props) {
                 placeholder="¿Qué hará la persona? ¿Con quién trabajará? ¿Qué ofreces?"
                 aria-invalid={fieldState.invalid}
               />
+              <FieldDescription>
+                Puedes usar formato: **negritas**, listas con guion y una línea en blanco entre párrafos.
+              </FieldDescription>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
