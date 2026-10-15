@@ -24,6 +24,8 @@ const PAGES: { path: string; role: MockRole }[] = [
 for (const theme of ["light", "dark"] as const) {
   test.describe(`${theme} theme`, () => {
     test.use({ colorScheme: theme })
+    // axe analysis is slower than functional checks, especially on a cold server.
+    test.setTimeout(60_000)
 
     for (const { path, role } of PAGES) {
       test(`${path} (${role}) has no WCAG A/AA violations`, async ({ page, context, baseURL }) => {

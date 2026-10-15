@@ -1,7 +1,9 @@
+import { Suspense } from "react"
+
+import { VerifyEmailBanner } from "@/components/auth/verify-email-banner"
 import { SectionNav } from "@/components/layout/section-nav"
 
-// Role guard runs in each page via requireCompany() (it needs the page path for callbackUrl).
-// TODO(auth): also protect /empresa/* in proxy.ts (Next 16 replacement for middleware.ts).
+// Access: src/proxy.ts redirects by role first; each page re-checks with requireCompany().
 export default function CompanyLayout({ children }: LayoutProps<"/empresa">) {
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
@@ -13,6 +15,9 @@ export default function CompanyLayout({ children }: LayoutProps<"/empresa">) {
           { href: "/empresa/perfil", label: "Perfil de empresa" },
         ]}
       />
+      <Suspense fallback={null}>
+        <VerifyEmailBanner />
+      </Suspense>
       {children}
     </div>
   )

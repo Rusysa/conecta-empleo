@@ -5,7 +5,16 @@ import { Plus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import { StatusBadge } from "@/components/applications/status-badge"
+import { JobStatusBadge } from "@/components/jobs/job-status-badge"
 import { requireCompany } from "@/lib/authz"
 import { formatRelativeDate } from "@/lib/format"
 import { getCompanyDashboard } from "@/server/queries/company"
@@ -41,6 +50,49 @@ async function Dashboard() {
           hint="con estado Enviada"
         />
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Postulantes por vacante</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {data.jobs.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No tienes vacantes abiertas.</p>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Vacante</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead className="text-right">Postulantes</TableHead>
+                  <TableHead className="text-right">Sin revisar</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.jobs.map((job) => (
+                  <TableRow key={job.id}>
+                    <TableCell className="font-medium whitespace-normal">
+                      <Link
+                        href={`/empresa/vacantes/${job.id}/postulantes`}
+                        className="hover:underline"
+                      >
+                        {job.title}
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <JobStatusBadge status={job.status} />
+                    </TableCell>
+                    <TableCell className="text-right tabular-nums">{job.applicantCount}</TableCell>
+                    <TableCell className="text-right tabular-nums">
+                      {job.newApplicantCount}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>

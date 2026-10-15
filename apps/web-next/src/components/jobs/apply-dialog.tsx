@@ -8,6 +8,7 @@ import { FileText, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
+import { FormAlert } from "@/components/layout/form-alert"
 import {
   Dialog,
   DialogClose,
@@ -21,6 +22,7 @@ import {
 import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field"
 import { Textarea } from "@/components/ui/textarea"
 import { applySchema, type ApplyInput } from "@/lib/validations/application"
+import { mockActionResult, type ActionError } from "@/lib/action-result"
 
 type Props = {
   jobTitle: string
@@ -31,6 +33,7 @@ type Props = {
 export function ApplyDialog({ jobTitle, companyName, candidate }: Props) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
+  const [formError, setFormError] = useState<ActionError | null>(null)
   const form = useForm<ApplyInput>({
     resolver: zodResolver(applySchema),
     defaultValues: { message: "" },
@@ -38,7 +41,12 @@ export function ApplyDialog({ jobTitle, companyName, candidate }: Props) {
 
   async function onSubmit(values: ApplyInput) {
     // TODO(backend): call the applyToJob(jobId, message) Server Action.
-    await new Promise((r) => setTimeout(r, 800))
+    setFormError(null)
+    const result = await mockActionResult()
+    if (!result.ok) {
+      setFormError(result.error)
+      return
+    }
     console.info("applyToJob (mock)", values)
     toast.success("¡Postulación enviada!", {
       description: `${companyName} recibió tus datos y tu CV.`,
@@ -60,6 +68,8 @@ export function ApplyDialog({ jobTitle, companyName, candidate }: Props) {
             <DialogTitle>Aplicar a {jobTitle}</DialogTitle>
             <DialogDescription>{companyName} recibirá los siguientes datos:</DialogDescription>
           </DialogHeader>
+
+          <FormAlert error={formError} />
 
           <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 rounded-lg bg-muted p-3 text-sm">
             <dt className="text-muted-foreground">Nombre</dt>

@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Controller, useForm } from "react-hook-form"
@@ -7,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Building2, Loader2, UserRound } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { FormAlert } from "@/components/layout/form-alert"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   Field,
@@ -21,6 +23,7 @@ import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { setMockRoleCookie } from "@/components/layout/mock-role-cookie"
 import { registerSchema, type RegisterInput } from "@/lib/validations/auth"
+import { mockActionResult, type ActionError } from "@/lib/action-result"
 
 const ROLE_OPTIONS = [
   { value: "CANDIDATE", label: "Busco empleo", icon: UserRound },
@@ -29,6 +32,7 @@ const ROLE_OPTIONS = [
 
 export function RegisterForm({ defaultRole }: { defaultRole: RegisterInput["role"] }) {
   const router = useRouter()
+  const [formError, setFormError] = useState<ActionError | null>(null)
   const form = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -42,7 +46,12 @@ export function RegisterForm({ defaultRole }: { defaultRole: RegisterInput["role
 
   async function onSubmit(values: RegisterInput) {
     // TODO(backend): registerUser() Server Action, then signIn().
-    await new Promise((r) => setTimeout(r, 800))
+    setFormError(null)
+    const result = await mockActionResult(values.email)
+    if (!result.ok) {
+      setFormError(result.error)
+      return
+    }
     console.info("registerUser (mock)", { role: values.role, email: values.email })
     setMockRoleCookie(values.role === "CANDIDATE" ? "CANDIDATE_INCOMPLETE" : "COMPANY")
     router.push(values.role === "CANDIDATE" ? "/candidato/perfil" : "/empresa/perfil")
@@ -52,6 +61,7 @@ export function RegisterForm({ defaultRole }: { defaultRole: RegisterInput["role
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
       <FieldGroup>
+        <FormAlert error={formError} />
         <Controller
           name="role"
           control={form.control}

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 
+import { actionErrorMessage } from "@/lib/action-result"
 import { escapeCsvCell, toCsv } from "@/lib/csv"
 import { formatSalary } from "@/lib/format"
 import { buildJobsHref, parseJobSearchParams } from "@/lib/job-search-params"
@@ -77,5 +78,21 @@ describe("formatSalary", () => {
     expect(formatSalary(9000, 11000)).toMatch(/^\$9,000 – \$11,000$/)
     expect(formatSalary(8000, null)).toMatch(/^Desde \$8,000$/)
     expect(formatSalary(null, null)).toBeNull()
+  })
+})
+
+describe("actionErrorMessage", () => {
+  it("tells the user how long to wait when rate limited", () => {
+    expect(actionErrorMessage({ code: "RATE_LIMITED", retryAfterSeconds: 30 })).toBe(
+      "Demasiados intentos. Intenta de nuevo en 30 segundos."
+    )
+    expect(actionErrorMessage({ code: "RATE_LIMITED", retryAfterSeconds: 90 })).toMatch(
+      /en 2 minutos/
+    )
+    expect(actionErrorMessage({ code: "RATE_LIMITED" })).toMatch(/unos minutos/)
+  })
+
+  it("falls back to a generic message", () => {
+    expect(actionErrorMessage({ code: "UNKNOWN" })).toBe("Algo salió mal. Intenta de nuevo.")
   })
 })

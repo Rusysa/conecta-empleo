@@ -10,15 +10,17 @@ import { Button } from "@/components/ui/button"
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { CompanyLogo } from "@/components/jobs/company-logo"
+import { LogoUpload } from "@/components/company/logo-upload"
 import { companyProfileSchema, slugify, type CompanyProfileInput } from "@/lib/validations/company"
 
 export function CompanyProfileForm({
   defaultValues,
   currentSlug,
+  logoUrl,
 }: {
   defaultValues: CompanyProfileInput
   currentSlug: string | null
+  logoUrl: string | null
 }) {
   const form = useForm<CompanyProfileInput>({
     resolver: zodResolver(companyProfileSchema),
@@ -39,12 +41,7 @@ export function CompanyProfileForm({
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
       <FieldGroup>
-        <div className="flex items-center gap-4">
-          <CompanyLogo company={{ name: name || "?", logoUrl: null }} className="size-16" />
-          <p className="text-sm text-muted-foreground">
-            Por ahora mostramos las iniciales de tu empresa. La subida de logotipo llegará pronto.
-          </p>
-        </div>
+        <LogoUpload name={name} logoUrl={logoUrl} />
 
         <Controller
           name="name"

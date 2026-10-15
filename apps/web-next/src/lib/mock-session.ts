@@ -17,8 +17,9 @@ export type MockSession =
       email: string
       candidateId: string
       profileComplete: boolean
+      emailVerified: boolean
     }
-  | { role: "COMPANY"; email: string; companyId: string }
+  | { role: "COMPANY"; email: string; companyId: string; emailVerified: boolean }
   | null
 
 export async function getMockRole(): Promise<MockRole> {
@@ -36,10 +37,17 @@ export async function getMockSession(): Promise<MockSession> {
       email: candidate.email,
       candidateId: candidate.id,
       profileComplete: role === "CANDIDATE",
+      // Mock: a fresh account (no CV yet) has not verified its email.
+      emailVerified: role === "CANDIDATE",
     }
   }
   if (role === "COMPANY") {
-    return { role: "COMPANY", email: "rh@tecnologiasnorte.mx", companyId: companies[0].id }
+    return {
+      role: "COMPANY",
+      email: "rh@tecnologiasnorte.mx",
+      companyId: companies[0].id,
+      emailVerified: true,
+    }
   }
   return null
 }

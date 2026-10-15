@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Controller, useForm } from "react-hook-form"
@@ -7,14 +8,17 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { FormAlert } from "@/components/layout/form-alert"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { setMockRoleCookie } from "@/components/layout/mock-role-cookie"
 import { safeRedirectPath } from "@/lib/safe-redirect"
 import { loginSchema, type LoginInput } from "@/lib/validations/auth"
+import { mockActionResult, type ActionError } from "@/lib/action-result"
 
 export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
   const router = useRouter()
+  const [formError, setFormError] = useState<ActionError | null>(null)
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
@@ -22,7 +26,12 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
 
   async function onSubmit(values: LoginInput) {
     // TODO(backend): signIn("credentials", ...) from Auth.js.
-    await new Promise((r) => setTimeout(r, 600))
+    setFormError(null)
+    const result = await mockActionResult(values.email)
+    if (!result.ok) {
+      setFormError(result.error)
+      return
+    }
     console.info("login (mock)", values.email)
     setMockRoleCookie("CANDIDATE")
     router.push(safeRedirectPath(callbackUrl) ?? "/vacantes")
@@ -32,6 +41,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
       <FieldGroup>
+        <FormAlert error={formError} />
         <Controller
           name="email"
           control={form.control}

@@ -15,6 +15,7 @@ async function ProfileContent() {
   return (
     <CompanyProfileForm
       currentSlug={company?.slug ?? null}
+      logoUrl={company?.logoUrl ?? null}
       defaultValues={{
         name: company?.name ?? "",
         description: company?.description ?? "",

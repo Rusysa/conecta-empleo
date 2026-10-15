@@ -2,7 +2,12 @@ import { describe, expect, it } from "vitest"
 
 import { registerSchema, resetPasswordSchema } from "@/lib/validations/auth"
 import { candidateProfileSchema, CV_MAX_BYTES, validateCvFile } from "@/lib/validations/candidate"
-import { companyProfileSchema, slugify } from "@/lib/validations/company"
+import {
+  companyProfileSchema,
+  LOGO_MAX_BYTES,
+  slugify,
+  validateLogoFile,
+} from "@/lib/validations/company"
 import { jobSchema } from "@/lib/validations/job"
 
 const PDF = "application/pdf"
@@ -137,5 +142,18 @@ describe("jobSchema", () => {
 
   it("allows empty salaries", () => {
     expect(jobSchema.safeParse({ ...valid, salaryMin: "", salaryMax: "" }).success).toBe(true)
+  })
+})
+
+describe("validateLogoFile", () => {
+  it("accepts PNG/JPG/WebP up to 2 MB", () => {
+    expect(validateLogoFile({ type: "image/png", size: 1000 })).toBeNull()
+    expect(validateLogoFile({ type: "image/webp", size: LOGO_MAX_BYTES })).toBeNull()
+  })
+
+  it("rejects SVG (can carry scripts), other types and oversized files", () => {
+    expect(validateLogoFile({ type: "image/svg+xml", size: 100 })).toMatch(/PNG, JPG o WebP/)
+    expect(validateLogoFile({ type: "application/pdf", size: 100 })).toMatch(/PNG, JPG o WebP/)
+    expect(validateLogoFile({ type: "image/png", size: LOGO_MAX_BYTES + 1 })).toMatch(/2 MB/)
   })
 })
