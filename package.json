@@ -11,7 +11,11 @@
     "dev:web": "pnpm --filter @conecta/web dev",
     "build": "pnpm --filter @conecta/web build",
     "test": "pnpm --filter @conecta/api test",
-    "start:api": "pnpm --filter @conecta/api start"
+    "start:api": "pnpm --filter @conecta/api start",
+    "dev:web-next": "pnpm --filter @conecta/web-next dev",
+    "build:web-next": "pnpm --filter @conecta/web-next build",
+    "test:web-next": "pnpm --filter @conecta/web-next test",
+    "test:e2e:web-next": "pnpm --filter @conecta/web-next test:e2e"
   },
   "dependencies": {},
   "devDependencies": {}
