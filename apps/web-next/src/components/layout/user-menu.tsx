@@ -2,7 +2,6 @@
 
 import { CircleUser, LogOut } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,9 +18,9 @@ export function UserMenu({ email }: { email: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Menú de usuario">
-          <CircleUser className="size-5" />
-        </Button>
+        <button type="button" className="pill nav__icon" aria-label="Menú de usuario">
+          <CircleUser />
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="truncate font-normal text-muted-foreground">

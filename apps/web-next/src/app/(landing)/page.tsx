@@ -17,7 +17,8 @@ import {
 } from "@/components/landing/landing-art"
 import { toLandingJob, type LandingJob } from "@/components/landing/landing-job-card"
 import { LandingJobs } from "@/components/landing/landing-jobs"
-import { LandingShell, SplitChars } from "@/components/landing/landing-shell"
+import { LandingShell } from "@/components/landing/landing-shell"
+import { SplitChars } from "@/components/landing/split-chars"
 import { RollText } from "@/components/landing/roll-text"
 import { getRecentJobs } from "@/server/queries/jobs"
 

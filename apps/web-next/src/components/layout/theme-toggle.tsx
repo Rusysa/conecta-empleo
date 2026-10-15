@@ -3,7 +3,6 @@
 import { Monitor, Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 
-import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,11 +23,11 @@ export function ThemeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Cambiar tema">
+        <button type="button" className="pill nav__icon hide-sm" aria-label="Cambiar tema">
           {/* Icon swaps via CSS so server and client render the same markup. */}
           <Sun className="dark:hidden" />
           <Moon className="hidden dark:block" />
-        </Button>
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>

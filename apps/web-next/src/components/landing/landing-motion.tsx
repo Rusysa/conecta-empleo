@@ -54,6 +54,13 @@ export function LandingMotion({ rootId }: { rootId: string }) {
     // Pages share this component but not every block ("/vacantes" has no stage or kinetic
     // rows), so each one only runs when its elements exist (GSAP warns on empty targets).
     const has = (selector: string) => root.querySelector(selector) !== null
+    // The nav and footer belong to the root layout (outside root), shared by every page.
+    const nav = document.querySelector<HTMLElement>(".nav")
+    const navParts = nav
+      ? [...nav.querySelectorAll<HTMLElement>(".logo, .nav__session, .nav__right > .pill--dark")]
+      : []
+    const navPills = () => document.querySelectorAll<HTMLElement>(".nav__pills .pill")
+    const footerWordmark = document.querySelector<HTMLElement>(".js-foot")
 
     const ctx = gsap.context(() => {
       // Idle float for every sticker (their resting tilt comes from CSS `rotate: var(--r)`).
@@ -89,17 +96,14 @@ export function LandingMotion({ rootId }: { rootId: string }) {
       if (has("#hero .js-fade")) {
         intro.from("#hero .js-fade", { y: 40, opacity: 0, duration: 1, stagger: 0.1 }, 1)
       }
-      intro
-        .from(
-          ".nav .logo, .nav__right > *",
+      // Only stable nav wrappers: the session links inside stream in and hydrate later.
+      if (navParts.length) {
+        intro.from(
+          navParts,
           { y: -30, opacity: 0, duration: 0.8, stagger: 0.05, ease: "back.out(2)" },
           0.6
         )
-        .from(
-          ".nav__pills .pill",
-          { x: 40, opacity: 0, duration: 0.7, stagger: 0.05, ease: "back.out(1.8)" },
-          0.8
-        )
+      }
 
       // Scroll parallax for stickers with data-speed.
       gsap.utils.toArray<HTMLElement>(".stk[data-speed]").forEach((s) => {
@@ -127,8 +131,6 @@ export function LandingMotion({ rootId }: { rootId: string }) {
       }
 
       // 3. Nav: pills hide when scrolling down and come back on scroll up.
-      const pills = gsap.utils.toArray<HTMLElement>(".nav__pills .pill")
-      const nav = root.querySelector(".nav")
       let shown = true
       ScrollTrigger.create({
         start: 0,
@@ -138,7 +140,7 @@ export function LandingMotion({ rootId }: { rootId: string }) {
           const want = self.direction === -1 || self.scroll() < 80
           if (want === shown) return
           shown = want
-          gsap.to(pills, {
+          gsap.to(navPills(), {
             x: want ? 0 : 40,
             opacity: want ? 1 : 0,
             scale: want ? 1 : 0.8,
@@ -320,13 +322,15 @@ export function LandingMotion({ rootId }: { rootId: string }) {
       })
 
       // 11. Footer wordmark chars rise.
-      gsap.from(".js-foot .ch > span", {
-        yPercent: 110,
-        duration: 1.2,
-        stagger: 0.035,
-        ease: "expo.out",
-        scrollTrigger: { trigger: ".js-foot", start: "top 95%" },
-      })
+      if (footerWordmark) {
+        gsap.from(footerWordmark.querySelectorAll(".ch > span"), {
+          yPercent: 110,
+          duration: 1.2,
+          stagger: 0.035,
+          ease: "expo.out",
+          scrollTrigger: { trigger: footerWordmark, start: "top 95%" },
+        })
+      }
     }, root)
 
     const refresh = () => ScrollTrigger.refresh()
@@ -353,6 +357,10 @@ export function LandingMotion({ rootId }: { rootId: string }) {
       hero?.removeEventListener("pointermove", onPointerMove)
       gsap.killTweensOf(heroStickers)
       ctx.revert()
+      // The nav outlives this page: drop the scroll state the landing left on it.
+      nav?.classList.remove("is-stuck")
+      gsap.killTweensOf(navPills())
+      gsap.set(navPills(), { clearProps: "transform,opacity,pointerEvents" })
       gsap.ticker.remove(raf)
       gsap.ticker.lagSmoothing(500, 33)
       lenis.destroy()

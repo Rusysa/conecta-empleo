@@ -18,9 +18,9 @@ export function MobileNav({ links, email }: { links: NavLink[]; email: string | 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="ml-auto md:hidden" aria-label="Abrir menú">
+        <button type="button" className="pill nav__icon nav__menu" aria-label="Abrir menú">
           <Menu />
-        </Button>
+        </button>
       </SheetTrigger>
       <SheetContent side="right" className="w-72">
         <SheetHeader>

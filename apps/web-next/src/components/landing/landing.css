@@ -1,7 +1,7 @@
-/* Presentation landing (originally apps/landing/index.html).
-   Every rule is scoped to .lp so it never leaks into the rest of the app,
-   which keeps using Tailwind + shadcn/ui. Element resets skip shadcn parts ([data-slot]),
-   because unlayered rules here would otherwise beat Tailwind utilities. */
+/* Island design system (originally apps/landing/index.html).
+   The whole site renders inside one .lp wrapper (see app/layout.tsx): frames on black,
+   pill nav and footer. Element resets are left to Tailwind's preflight so shadcn/ui and
+   utility classes keep working inside .lp; rules here only target their own classes. */
 
 .lp {
   --color-carbon: #000000;
@@ -49,32 +49,10 @@ html.lenis body {
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }
-.lp :where(a:not([data-slot])) {
-  color: inherit;
-  text-decoration: none;
-}
-.lp :where(button:not([data-slot])) {
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-  background: none;
-  border: 0;
-}
-.lp img,
-.lp svg {
-  display: block;
-}
-.lp :focus-visible {
+
+.lp :where(.pill, .logo, .cat, .kcard, summary):focus-visible {
   outline: 3px solid var(--color-voltage-violet);
   outline-offset: 3px;
-}
-.lp .sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
 }
 
 .lp .wrap {
@@ -151,7 +129,7 @@ html.lenis body {
   position: fixed;
   left: 0;
   right: 0;
-  top: 42px;
+  top: 14px;
   z-index: 100;
   padding: 0 calc(var(--frame) + 18px);
   display: flex;
@@ -160,7 +138,10 @@ html.lenis body {
   pointer-events: none;
   transition: top 0.3s ease;
 }
-.lp .nav.is-stuck {
+.lp:has(.marquee) .nav {
+  top: 42px;
+}
+.lp:has(.marquee) .nav.is-stuck {
   top: 14px;
 }
 .lp .nav > * {
@@ -1122,8 +1103,10 @@ html.lenis body {
     --frame: 6px;
   }
   .lp .nav {
-    top: 36px;
     padding: 0 14px;
+  }
+  .lp:has(.marquee) .nav {
+    top: 36px;
   }
   .lp .nav .cta-txt {
     display: none;
@@ -1388,5 +1371,102 @@ html.lenis body {
   .lp .palm__body,
   .lp .palm__crown {
     animation: none;
+  }
+}
+
+/* ---------- Global chrome: nav extras ---------- */
+.lp .nav__pills .pill[aria-current="page"] {
+  background: var(--color-carbon);
+  color: var(--color-paper-white);
+}
+.lp .nav__icon {
+  width: 52px;
+  padding: 0;
+}
+.lp .nav__icon svg {
+  width: 20px;
+  height: 20px;
+}
+.lp .nav__menu {
+  display: none;
+}
+@media (max-width: 1100px) {
+  .lp .nav__menu {
+    display: inline-flex;
+  }
+}
+@media (max-width: 760px) {
+  .lp .nav__right {
+    gap: 3px;
+  }
+  .lp .nav .pill {
+    height: 44px;
+    padding: 0 14px;
+    font-size: 12px;
+  }
+  .lp .nav .nav__icon,
+  .lp .nav .plus {
+    width: 44px;
+    padding: 0;
+  }
+  .lp .nav .hide-sm {
+    display: none;
+  }
+}
+
+/* ---------- Page frame for every other route ---------- */
+.lp .isle-frame {
+  background: var(--background);
+  color: var(--foreground);
+  min-height: calc(100vh - 2 * var(--frame));
+  padding: 96px 0 calc(clamp(64px, 8vw, 120px) + 40px);
+}
+.lp .isle-frame__inner {
+  position: relative;
+  z-index: 2;
+}
+.lp .isle-frame__palm {
+  position: absolute;
+  z-index: 1;
+  right: -2%;
+  bottom: clamp(30px, 4vw, 60px);
+  width: clamp(110px, 12vw, 210px);
+  height: auto;
+  rotate: -8deg;
+  scale: -1 1;
+  pointer-events: none;
+}
+/* Page titles use the island display face. */
+.lp .isle-frame h1 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  line-height: 0.9;
+  font-size: clamp(40px, 6vw, 84px);
+}
+.lp .isle-frame [data-slot="card-title"] h1 {
+  font-size: clamp(34px, 4.4vw, 52px);
+}
+.dark .lp .isle-frame .sea {
+  opacity: 0.85;
+}
+@media (max-width: 760px) {
+  .lp .isle-frame {
+    padding-top: 84px;
+  }
+  .lp .isle-frame__palm {
+    width: 26vw;
+    right: -6%;
+  }
+}
+.lp .nav__session {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+@media (max-width: 760px) {
+  .lp .nav__session {
+    gap: 3px;
   }
 }
