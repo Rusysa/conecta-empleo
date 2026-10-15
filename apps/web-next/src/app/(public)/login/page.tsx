@@ -16,7 +16,9 @@ export default function LoginPage({ searchParams }: PageProps<"/login">) {
     <div className="mx-auto max-w-md px-4 py-12">
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl">Iniciar sesión</CardTitle>
+          <CardTitle className="text-xl">
+            <h1>Iniciar sesión</h1>
+          </CardTitle>
           <CardDescription>Accede para aplicar o gestionar tus vacantes.</CardDescription>
         </CardHeader>
         <CardContent>

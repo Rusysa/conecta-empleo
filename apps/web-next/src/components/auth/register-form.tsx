@@ -71,7 +71,7 @@ export function RegisterForm({ defaultRole }: { defaultRole: RegisterInput["role
                         <Icon className="size-4" aria-hidden />
                         {label}
                       </FieldContent>
-                      <RadioGroupItem value={value} id={`role-${value}`} />
+                      <RadioGroupItem value={value} id={`role-${value}`} aria-label={label} />
                     </Field>
                   </FieldLabel>
                 ))}

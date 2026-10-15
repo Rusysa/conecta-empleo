@@ -46,7 +46,10 @@ export function ProfileEditor({ email, profile, cv: initialCv, next }: Props) {
         <Card className="border-primary/30 bg-primary/5">
           <CardHeader>
             <CardTitle>Completa tu perfil para poder aplicar</CardTitle>
-            <CardDescription>Las empresas recibirán estos datos cuando apliques.</CardDescription>
+            {/* Darker than muted-foreground: muted text on the tinted banner fails AA contrast. */}
+            <CardDescription className="text-foreground/80">
+              Las empresas recibirán estos datos cuando apliques.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <ol className="grid gap-2 text-sm sm:grid-cols-2">

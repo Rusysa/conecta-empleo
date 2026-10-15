@@ -29,7 +29,9 @@ export default function ResetPasswordPage({ searchParams }: PageProps<"/recupera
     <div className="mx-auto max-w-md px-4 py-12">
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl">Crea una nueva contraseña</CardTitle>
+          <CardTitle className="text-xl">
+            <h1>Crea una nueva contraseña</h1>
+          </CardTitle>
           <CardDescription>Elige una contraseña que no uses en otros sitios.</CardDescription>
         </CardHeader>
         <CardContent>

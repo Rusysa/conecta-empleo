@@ -18,7 +18,9 @@ export default function RegisterPage({ searchParams }: PageProps<"/registro">) {
     <div className="mx-auto max-w-md px-4 py-12">
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl">Crear cuenta</CardTitle>
+          <CardTitle className="text-xl">
+            <h1>Crear cuenta</h1>
+          </CardTitle>
           <CardDescription>Es gratis y toma menos de un minuto.</CardDescription>
         </CardHeader>
         <CardContent>
