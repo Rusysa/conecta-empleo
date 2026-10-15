@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ContactForm } from "@/components/candidate/contact-form"
 import { CvUpload, type CurrentCv } from "@/components/candidate/cv-upload"
-import { setMockRoleCookie } from "@/components/layout/mock-role-cookie"
 import type { CandidateProfileInput } from "@/lib/validations/candidate"
 
 type Props = {
@@ -30,8 +29,7 @@ export function ProfileEditor({ email, profile, cv: initialCv, next }: Props) {
 
   function maybeComplete(nowHasContact: boolean, nowHasCv: boolean) {
     if (complete || !nowHasContact || !nowHasCv) return
-    // TODO(backend): drop this; completeness will come from the DB.
-    setMockRoleCookie("CANDIDATE")
+    // TODO(backend): completeness will come from the DB.
     toast.success("¡Tu perfil está completo!", {
       description: next ? "Ya puedes aplicar a la vacante." : "Ya puedes aplicar a vacantes.",
     })

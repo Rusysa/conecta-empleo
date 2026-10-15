@@ -1,5 +1,7 @@
 # CLAUDE.md — Bolsa de Trabajo (Job Board)
 
+> Integración 2026-10-15: identidad y perfil se implementaron mediante la API Express existente, PostgreSQL/Supabase y JWT firmado con JWS, sin OAuth. Para esa parte prevalecen `../../packages/contracts/HTTP.md` y `../../docs/SUPABASE.md`. Los roles visuales se adaptan a `candidate`/`employer`; no duplicar cuentas con Prisma/Auth.js. El resto de este documento conserva la propuesta original para funcionalidades futuras (archivos de CV, vacantes, postulaciones, correo).
+
 > Documento de contexto para Claude Code. Describe el producto, el stack, el modelo de datos, los flujos y el plan de desarrollo. Léelo completo antes de escribir código y síguelo como fuente de verdad. Si algo no está definido aquí, pregunta antes de inventarlo.
 
 ---

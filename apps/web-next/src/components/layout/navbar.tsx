@@ -3,7 +3,7 @@ import Link from "next/link"
 import { BriefcaseBusiness } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { getMockSession } from "@/lib/mock-session"
+import { getSession } from "@/lib/session"
 import { getNavLinks } from "@/components/layout/nav-links"
 import { MobileNav } from "@/components/layout/mobile-nav"
 import { ThemeToggle } from "@/components/layout/theme-toggle"
@@ -28,7 +28,7 @@ export function Navbar() {
 
 /** Session-dependent part of the navbar (reads cookies, so it streams). */
 async function SessionNav() {
-  const session = await getMockSession()
+  const session = await getSession()
   const links = getNavLinks(session)
 
   return (

@@ -1,18 +1,11 @@
-import { Suspense } from "react"
 import Link from "next/link"
 
-import { getMockRole } from "@/lib/mock-session"
-import { DevRoleSwitcher } from "@/components/layout/dev-role-switcher"
 
 async function CurrentYear() {
   "use cache"
   return new Date().getFullYear()
 }
 
-async function RoleSwitcher() {
-  const role = await getMockRole()
-  return <DevRoleSwitcher role={role} />
-}
 
 export function Footer() {
   return (
@@ -29,11 +22,6 @@ export function Footer() {
             Aviso de privacidad
           </Link>
         </nav>
-        {process.env.NODE_ENV !== "production" && (
-          <Suspense fallback={<div className="h-7 w-72" />}>
-            <RoleSwitcher />
-          </Suspense>
-        )}
       </div>
     </footer>
   )

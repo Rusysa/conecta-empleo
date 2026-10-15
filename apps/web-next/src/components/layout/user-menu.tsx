@@ -11,10 +11,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useMockLogout } from "@/components/layout/use-mock-logout"
+import { useLogout } from "@/components/layout/use-logout"
 
 export function UserMenu({ email }: { email: string }) {
-  const logout = useMockLogout()
+  const logout = useLogout()
 
   return (
     <DropdownMenu>

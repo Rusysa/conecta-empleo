@@ -23,15 +23,15 @@ Los nombres de responsables se asignarán al integrar al equipo. No hay colabora
 
 ## Fase 1: trabajo en paralelo
 
-- [ ] **PLAT-01** Integrar cliente PostgreSQL y runner de migraciones con tabla de versiones y bloqueo. Aceptación: crear esquema limpio y volver a ejecutar sin duplicar migraciones.
-- [ ] **AUTH-01** Registro y normalización de email; Argon2id. Aceptación: email duplicado rechazado, hashes seguros, roles válidos.
-- [ ] **AUTH-02** Sesiones persistidas, CSRF, límites de intentos y middleware. Aceptación: login/cierre real, cookie segura y rutas protegidas.
-- [ ] **USER-01** Perfil propio y fachada de consulta de candidato. Aceptación: un usuario no puede editar otro perfil ni cambiar su rol.
+- [x] **PLAT-01** Cliente PostgreSQL, migraciones versionadas con Supabase CLI y proyecto remoto. Despliegues de migraciones serializados; no lanzar `db push` concurrente.
+- [x] **AUTH-01** Registro y normalización de email; Argon2id. Email duplicado rechazado, hashes seguros, roles válidos y consentimiento registrado.
+- [x] **AUTH-02** JWT/JWS con sesiones persistidas revocables, CSRF, límites de intentos y middleware de roles.
+- [x] **USER-01** Perfil propio: consulta y edición, sin cambiar correo/rol ni editar cuentas ajenas. Fachada de creación pública para auth; consulta de candidatos para empleadores pendiente de APP-02.
 - [ ] **JOB-01** Listado público, filtros, paginación y detalle. Aceptación: ningún borrador ajeno es visible.
 - [ ] **JOB-02** Crear, editar, publicar, cerrar y reabrir. Aceptación: otro empleador recibe 404 al intentar modificar la vacante.
 - [ ] **APP-01** Creación de candidatura y listado propio. Aceptación: duplicado o vacante cerrada devuelve 409.
 - [ ] **APP-02** Consulta de candidatos, transiciones y retirada. Aceptación: permisos por autoría y máquina de estados comprobados.
-- [ ] **WEB-01** Registro, acceso, navegación y perfil con estados de carga/error.
+- [x] **WEB-01** Next.js: registro, acceso, logout, navegación y perfil con estados de carga/error y API real.
 - [ ] **WEB-02** Tablero, filtros y detalle de oferta.
 - [ ] **WEB-03** Panel de empleador y postulaciones de candidato.
 

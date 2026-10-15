@@ -2,7 +2,7 @@
 
 Propuesta de frontend en **Next.js 16 (App Router) + TypeScript + Tailwind CSS v4 + shadcn/ui (Radix)**.
 
-**Estado:** solo frontend, con datos simulados. No consume todavía la API de `apps/api`.
+**Estado:** registro, login, logout y perfil conectados a `apps/api`, con correo/contraseña y JWT/JWS en cookie HttpOnly, sin OAuth. El catálogo de vacantes conserva los datos de demostración de la propuesta original; las postulaciones todavía no se envían.
 
 ## Ejecutar
 
@@ -20,7 +20,7 @@ La primera vez, instala el navegador de Playwright con `pnpm --filter @conecta/w
 
 Variables de entorno: copia `apps/web-next/.env.example` a `apps/web-next/.env.local`.
 
-En desarrollo, el pie de página incluye un selector **"Vista previa como"** para ver la interfaz como visitante, candidato (con o sin CV) o empresa.
+Ejecutar también `pnpm dev:api` con PostgreSQL y `apps/api/.env` configurados. Ver [Supabase y autenticación](../../docs/SUPABASE.md). El selector de roles simulados fue retirado: la sesión y el rol se verifican en el servidor.
 
 ## Pantallas incluidas
 
@@ -29,21 +29,20 @@ En desarrollo, el pie de página incluye un selector **"Vista previa como"** par
 - `/vacantes/[id]`: detalle con botón Aplicar y todos sus estados, metadatos y JSON-LD `JobPosting`
 - `/empresas/[slug]`: perfil público de empresa
 - `/login`, `/registro`, `/recuperar`, `/recuperar/nueva?token=`, `/privacidad`
-- `/candidato/perfil`: datos de contacto, subida de CV y eliminación de cuenta
-- `/candidato/postulaciones`: postulaciones con su estado
-- `/empresa`: panel con métricas y postulantes recientes
-- `/empresa/perfil`: datos públicos de la empresa
-- `/empresa/vacantes`, `/empresa/vacantes/nueva`, `/empresa/vacantes/[id]/editar`: gestión de vacantes
-- `/empresa/vacantes/[id]/postulantes`: postulantes con filtros, cambio de estado y exportación a CSV
+- `/candidato/perfil`, `/empresa/perfil`: perfil persistente en la API y acceso por rol
+- `/candidato/postulaciones`: postulaciones con su estado (datos de demostración)
+- `/empresa`: panel con métricas y postulantes recientes (datos de demostración)
+- `/empresa/vacantes`, `/empresa/vacantes/nueva`, `/empresa/vacantes/[id]/editar`: gestión de vacantes (datos de demostración)
+- `/empresa/vacantes/[id]/postulantes`: postulantes con filtros, cambio de estado y exportación a CSV (datos de demostración)
 
 Las páginas de error (`error.tsx`, `global-error.tsx`) y 404 (`not-found.tsx`) están en `src/app/`.
 
 ## Dónde conectar el backend
 
 - `src/server/queries/*`: lecturas. Hoy usan `src/lib/mock-data.ts`.
-- `src/lib/mock-session.ts`: sesión simulada con una cookie. Hay que reemplazarla por la sesión real.
+- `src/lib/session.ts`: verificación de la sesión real contra la API, sin caché de identidad.
 - Busca `TODO(backend)` y `TODO(auth)` en el código.
 
 ## Diferencias con `packages/contracts`
 
-`CLAUDE.md` describe un modelo propio (roles `CANDIDATE`/`COMPANY`, estados de postulación `SUBMITTED/VIEWED/IN_PROCESS/REJECTED/HIRED`, carga de CV). Hay que alinearlo con `packages/contracts` antes de conectar la API.
+`CLAUDE.md` conserva la propuesta original para funciones futuras. Identidad/perfil ya se alinearon con `packages/contracts`: `CANDIDATE` ↔ `candidate`, `COMPANY` ↔ `employer`, y CV mediante enlace HTTPS. Las diferencias del catálogo y de las postulaciones se resolverán cuando se integren esos módulos; no duplicar la autenticación con Prisma/Auth.js.

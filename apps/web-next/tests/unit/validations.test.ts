@@ -11,9 +11,10 @@ const DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.doc
 describe("registerSchema", () => {
   const valid = {
     role: "CANDIDATE" as const,
+    name: "Ana López",
     email: "ana@example.com",
-    password: "12345678",
-    confirmPassword: "12345678",
+    password: "123456789012",
+    confirmPassword: "123456789012",
     acceptPrivacy: true,
   }
 
@@ -21,13 +22,13 @@ describe("registerSchema", () => {
     expect(registerSchema.safeParse(valid).success).toBe(true)
   })
 
-  it("requires at least 8 characters", () => {
-    const r = registerSchema.safeParse({ ...valid, password: "1234567", confirmPassword: "1234567" })
+  it("requires at least 12 characters", () => {
+    const r = registerSchema.safeParse({ ...valid, password: "12345678901", confirmPassword: "12345678901" })
     expect(r.success).toBe(false)
   })
 
   it("requires matching passwords, reported on confirmPassword", () => {
-    const r = registerSchema.safeParse({ ...valid, confirmPassword: "different1" })
+    const r = registerSchema.safeParse({ ...valid, confirmPassword: "different123" })
     expect(r.success).toBe(false)
     expect(r.error?.issues[0].path).toEqual(["confirmPassword"])
   })

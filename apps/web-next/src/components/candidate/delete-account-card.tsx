@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/dialog"
 import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { setMockRoleCookie } from "@/components/layout/mock-role-cookie"
 
 const CONFIRM_WORD = "ELIMINAR"
 
@@ -35,7 +34,6 @@ export function DeleteAccountCard() {
     // from storage (cvs/candidates/{id}/ and applications/{id}/), then signOut().
     await new Promise((r) => setTimeout(r, 900))
     console.info("deleteCandidateAccount (mock)")
-    setMockRoleCookie("GUEST")
     toast.success("Tu cuenta fue eliminada")
     router.push("/")
     router.refresh()

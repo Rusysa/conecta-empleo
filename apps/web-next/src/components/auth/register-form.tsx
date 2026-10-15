@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { setMockRoleCookie } from "@/components/layout/mock-role-cookie"
+import { mutate } from "@/lib/api"
 import { registerSchema, type RegisterInput } from "@/lib/validations/auth"
 
 const ROLE_OPTIONS = [
@@ -33,6 +33,7 @@ export function RegisterForm({ defaultRole }: { defaultRole: RegisterInput["role
     resolver: zodResolver(registerSchema),
     defaultValues: {
       role: defaultRole,
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -41,17 +42,33 @@ export function RegisterForm({ defaultRole }: { defaultRole: RegisterInput["role
   })
 
   async function onSubmit(values: RegisterInput) {
-    // TODO(backend): registerUser() Server Action, then signIn().
-    await new Promise((r) => setTimeout(r, 800))
-    console.info("registerUser (mock)", { role: values.role, email: values.email })
-    setMockRoleCookie(values.role === "CANDIDATE" ? "CANDIDATE_INCOMPLETE" : "COMPANY")
-    router.push(values.role === "CANDIDATE" ? "/candidato/perfil" : "/empresa/perfil")
-    router.refresh()
+    try {
+      await mutate("/auth/register", {
+        name: values.name, email: values.email, password: values.password,
+        role: values.role === "CANDIDATE" ? "candidate" : "employer", acceptPrivacy: values.acceptPrivacy,
+      })
+      router.push(values.role === "CANDIDATE" ? "/candidato/perfil" : "/empresa/perfil")
+      router.refresh()
+    } catch (error) {
+      form.setError("root", { message: error instanceof Error ? error.message : "No se pudo crear la cuenta." })
+    }
   }
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
       <FieldGroup>
+        {form.formState.errors.root && <p role="alert" className="text-sm text-destructive">{form.formState.errors.root.message}</p>}
+        <Controller
+          name="name"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="name">Tu nombre o nombre de la empresa</FieldLabel>
+              <Input {...field} id="name" autoComplete="name" maxLength={100} aria-invalid={fieldState.invalid} />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
         <Controller
           name="role"
           control={form.control}

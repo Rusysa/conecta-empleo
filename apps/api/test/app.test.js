@@ -14,8 +14,7 @@ test('health devuelve la versión y las cabeceras de seguridad', async () => {
 test('todos los módulos pendientes responden 501 sin simular operaciones exitosas', async () => {
   const app = createApp();
   const routes = [
-    ['post', '/auth/register'], ['post', '/auth/login'], ['post', '/auth/logout'], ['get', '/auth/session'],
-    ['get', '/users/me'], ['patch', '/users/me'], ['get', '/jobs'], ['post', '/jobs'],
+    ['get', '/jobs'], ['post', '/jobs'],
     ['get', '/jobs/1'], ['patch', '/jobs/1'], ['post', '/applications'],
     ['get', '/applications/mine'], ['get', '/applications/received'], ['patch', '/applications/1/status'],
   ];
@@ -24,6 +23,10 @@ test('todos los módulos pendientes responden 501 sin simular operaciones exitos
     assert.equal(res.status, 501, `${method} ${path}`);
     assert.equal(res.body.error.code, 'NOT_IMPLEMENTED');
   }
+});
+
+test('sin persistencia no simula una autenticación exitosa', async () => {
+  assert.equal((await request(createApp()).get('/api/v1/auth/session')).status, 503);
 });
 
 test('rutas inexistentes y JSON inválido devuelven errores estructurados', async () => {

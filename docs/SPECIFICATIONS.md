@@ -26,7 +26,7 @@ Todo permiso debe comprobarse en el servidor. Los identificadores enviados por e
 - Nombre: 2–100 caracteres. Correo válido normalizado a minúsculas y único. Contraseña: 12–128 caracteres, sin truncar. Rol: candidato o empleador.
 - El servidor almacena hash de contraseña con Argon2id y parámetros versionados; jamás contraseña en texto plano.
 - Inicio de sesión con error genérico y límites de intentos. Regenerar sesión al autenticar; cerrar sesión invalida el registro en el servidor.
-- Sesión en cookie HttpOnly, Secure en producción, SameSite=Lax. Caducidad propuesta: 8 horas de inactividad.
+- JWT firmado con JWS HS256 en cookie HttpOnly, Secure en producción, SameSite=Lax. Caducidad absoluta: 8 horas. El identificador de sesión se persiste para permitir revocación; sin OAuth ni renovación automática.
 - Recuperación y verificación de correo son tareas posteriores, obligatorias antes de apertura pública.
 
 ### Perfil

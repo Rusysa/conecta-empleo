@@ -2,7 +2,7 @@
 
 Tablero de empleo donde las empresas podrán publicar vacantes y los candidatos podrán postularse y consultar su proceso.
 
-**Estado: base inicial para desarrollo colaborativo.** Incluye frontend ejecutable, API modular, contratos compartidos, esquema de datos propuesto y especificaciones. El registro, las vacantes y las postulaciones **todavía no están implementados**; sus rutas responden `501 NOT_IMPLEMENTED`.
+**Estado:** registro, acceso, cierre de sesión y perfil implementados sobre PostgreSQL/Supabase. El frontend Next.js de `apps/web-next` conserva el trabajo de `feat/web-nextjs-frontend` y consume la API real para identidad. Autenticación por correo y contraseña con JWT firmado mediante JWS (HS256), sin OAuth. Vacantes y postulaciones siguen pendientes en la API (`501`); el catálogo Next.js conserva datos de demostración y no envía postulaciones ficticias.
 
 ## Organización
 
@@ -46,12 +46,16 @@ pnpm dev:web
 - Interfaz: `http://localhost:5173`.
 - Salud de la API: `http://localhost:3001/api/v1/health`.
 - Vite redirige `/api` al backend durante desarrollo.
-- La base actual no necesita base de datos; PostgreSQL se integrará en las tareas de persistencia.
-- Variables futuras documentadas en `apps/api/.env.example`; copiar a `apps/api/.env` cuando sean necesarias. No subir secretos.
+- La API requiere PostgreSQL con las migraciones aplicadas y `apps/api/.env` configurado. Ver [configuración Supabase](docs/SUPABASE.md).
+- Copiar `apps/api/.env.example` a `apps/api/.env` y generar `JWT_SECRET` aleatorio. No subir secretos.
+- Para los formularios reales ejecutar `pnpm dev:web-next` y abrir `http://localhost:3000`; `dev:web` conserva el frontend Vite inicial.
 
 ```bash
 pnpm test
 pnpm build
+pnpm build:web-next
+pnpm --filter @conecta/web-next lint
+pnpm db:check
 ```
 
 El build genera `apps/web/dist`. No es un despliegue ni incluye el servidor API. Para producción se requiere servir frontend y `/api` bajo el mismo origen y completar los controles indicados en la documentación.

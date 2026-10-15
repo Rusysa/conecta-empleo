@@ -9,8 +9,7 @@ import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { setMockRoleCookie } from "@/components/layout/mock-role-cookie"
-import { safeRedirectPath } from "@/lib/safe-redirect"
+import { mutate, safeCallback } from "@/lib/api"
 import { loginSchema, type LoginInput } from "@/lib/validations/auth"
 
 export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
@@ -21,17 +20,19 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
   })
 
   async function onSubmit(values: LoginInput) {
-    // TODO(backend): signIn("credentials", ...) from Auth.js.
-    await new Promise((r) => setTimeout(r, 600))
-    console.info("login (mock)", values.email)
-    setMockRoleCookie("CANDIDATE")
-    router.push(safeRedirectPath(callbackUrl) ?? "/vacantes")
-    router.refresh()
+    try {
+      await mutate("/auth/login", values)
+      router.push(safeCallback(callbackUrl))
+      router.refresh()
+    } catch (error) {
+      form.setError("root", { message: error instanceof Error ? error.message : "No se pudo iniciar sesión." })
+    }
   }
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
       <FieldGroup>
+        {form.formState.errors.root && <p role="alert" className="text-sm text-destructive">{form.formState.errors.root.message}</p>}
         <Controller
           name="email"
           control={form.control}
