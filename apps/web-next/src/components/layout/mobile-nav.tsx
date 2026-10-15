@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Menu } from "lucide-react"
+import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
@@ -10,10 +11,17 @@ import { Separator } from "@/components/ui/separator"
 import type { NavLink } from "@/components/layout/nav-links"
 import { useLogout } from "@/components/layout/use-logout"
 
+const THEMES = [
+  { value: "light", label: "Claro" },
+  { value: "dark", label: "Oscuro" },
+  { value: "system", label: "Sistema" },
+]
+
 export function MobileNav({ links, email }: { links: NavLink[]; email: string | null }) {
   const [open, setOpen] = useState(false)
   const logout = useLogout()
   const close = () => setOpen(false)
+  const { theme, setTheme } = useTheme()
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -61,8 +69,28 @@ export function MobileNav({ links, email }: { links: NavLink[]; email: string | 
                   Crear cuenta
                 </Link>
               </Button>
+              <Button variant="ghost" className="justify-start" asChild>
+                <Link href="/registro?tipo=empresa" onClick={close}>
+                  Publicar una vacante
+                </Link>
+              </Button>
             </>
           )}
+          {/* The nav's theme menu is hidden on phones, so the choice lives here. */}
+          <Separator className="my-2" />
+          <div role="group" aria-label="Tema" className="flex gap-1">
+            {THEMES.map(({ value, label }) => (
+              <Button
+                key={value}
+                size="sm"
+                variant={theme === value ? "default" : "outline"}
+                aria-pressed={theme === value}
+                onClick={() => setTheme(value)}
+              >
+                {label}
+              </Button>
+            ))}
+          </div>
         </nav>
       </SheetContent>
     </Sheet>

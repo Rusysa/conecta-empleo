@@ -16,17 +16,17 @@ async function AlertsContent() {
 export default function CandidateAlertsPage() {
   return (
     <>
-      <div className="space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight">Alertas de vacantes</h1>
-        <p className="text-muted-foreground">
+      <div className="space-y-3">
+        <h1>Alertas de vacantes</h1>
+        <p className="max-w-prose text-muted-foreground">
           Recibe por correo las vacantes nuevas de tus búsquedas guardadas.
         </p>
       </div>
       <Suspense
         fallback={
-          <div className="grid gap-3" aria-busy="true" aria-label="Cargando alertas">
+          <div className="grid gap-3 sm:grid-cols-2" aria-busy="true" aria-label="Cargando alertas">
             {Array.from({ length: 2 }).map((_, i) => (
-              <div key={i} className="h-20 animate-pulse rounded-xl bg-muted" />
+              <div key={i} className="h-36 animate-pulse rounded-[20px] border bg-muted" />
             ))}
           </div>
         }

@@ -51,8 +51,12 @@ html.lenis body {
 }
 
 .lp :where(.pill, .logo, .cat, .kcard, summary):focus-visible {
-  outline: 3px solid var(--color-voltage-violet);
+  outline: 3px solid var(--ring); /* violet by day, light lagoon at night */
   outline-offset: 3px;
+}
+/* Landing pages keep their light palette in both themes, so they keep the violet ring. */
+.lp .landing :where(.pill, .logo, .cat, .kcard, summary):focus-visible {
+  outline-color: var(--color-voltage-violet);
 }
 
 .lp .wrap {
@@ -130,7 +134,7 @@ html.lenis body {
   left: 0;
   right: 0;
   top: 14px;
-  z-index: 100;
+  z-index: 40; /* below shadcn overlays (dialogs, sheets, menus use z-50) */
   padding: 0 calc(var(--frame) + 18px);
   display: flex;
   justify-content: space-between;
@@ -724,6 +728,7 @@ html.lenis body {
 }
 .lp .job {
   background: var(--color-paper-white);
+  color: var(--color-carbon); /* fixed white card: keep black ink in the dark theme */
   border: var(--lp-border);
   border-radius: var(--radius-card);
   padding: 24px;
@@ -1182,6 +1187,7 @@ html.lenis body {
 }
 .lp .bg-sand {
   background: var(--color-sand);
+  color: var(--color-carbon);
 }
 .lp .job__pay small {
   font-weight: 500;
@@ -1307,6 +1313,7 @@ html.lenis body {
   flex-wrap: wrap;
 }
 .lp .empty {
+  color: var(--color-carbon); /* fixed sand fill: keep black ink in the dark theme */
   border: var(--lp-border);
   border-radius: var(--radius-card-lg);
   background: var(--color-sand);

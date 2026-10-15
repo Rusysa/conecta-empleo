@@ -10,29 +10,34 @@ type Props = Pick<
   "location" | "workMode" | "employmentType" | "salaryMin" | "salaryMax" | "currency"
 > & { className?: string }
 
-/** Inline list of job facts: location, work mode, type and salary. */
+// Island tags: outlined pills. Theme card colors, except salary, which is a fixed
+// sunburst sticker with black ink (AA in light and dark).
+const TAG =
+  "inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-bold tracking-[0.032em] text-card-foreground uppercase [&>svg]:size-3.5 [&>svg]:shrink-0"
+
+/** Job facts as island tags: location, work mode, type and salary. */
 export function JobMeta({ className, ...job }: Props) {
   const salary = formatSalary(job.salaryMin, job.salaryMax, job.currency)
 
   return (
-    <ul className={cn("flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground", className)}>
+    <ul className={cn("flex flex-wrap gap-1.5", className)}>
       {job.location && (
-        <li className="flex items-center gap-1.5">
-          <MapPin className="size-4" aria-hidden />
+        <li className={TAG}>
+          <MapPin aria-hidden />
           {job.location}
         </li>
       )}
-      <li className="flex items-center gap-1.5">
-        <Laptop className="size-4" aria-hidden />
+      <li className={TAG}>
+        <Laptop aria-hidden />
         {WORK_MODE_LABELS[job.workMode]}
       </li>
-      <li className="flex items-center gap-1.5">
-        <BriefcaseBusiness className="size-4" aria-hidden />
+      <li className={TAG}>
+        <BriefcaseBusiness aria-hidden />
         {EMPLOYMENT_TYPE_LABELS[job.employmentType]}
       </li>
       {salary && (
-        <li className="flex items-center gap-1.5">
-          <Banknote className="size-4" aria-hidden />
+        <li className={cn(TAG, "border-black bg-sunburst text-black")}>
+          <Banknote aria-hidden />
           {salary} <span className="sr-only">mensuales</span>
         </li>
       )}

@@ -10,6 +10,7 @@ function initials(name: string) {
     .join("")
 }
 
+/** Company logo as an outlined island tile; the fallback is a lavender sticker with initials. */
 export function CompanyLogo({
   company,
   className,
@@ -18,9 +19,17 @@ export function CompanyLogo({
   className?: string
 }) {
   return (
-    <Avatar className={cn("size-12 rounded-lg", className)}>
-      {company.logoUrl && <AvatarImage src={company.logoUrl} alt="" />}
-      <AvatarFallback className="rounded-lg bg-primary/10 font-semibold text-primary">
+    <Avatar
+      className={cn(
+        "@container size-12 overflow-hidden rounded-[28%] border border-border bg-white after:hidden",
+        className
+      )}
+    >
+      {company.logoUrl && (
+        <AvatarImage src={company.logoUrl} alt="" className="rounded-none object-contain" />
+      )}
+      {/* Fixed lavender fill with black ink: AA in both themes. Initials scale with the tile. */}
+      <AvatarFallback className="rounded-none bg-lavender font-display text-[38cqw] leading-none text-black uppercase">
         {initials(company.name)}
       </AvatarFallback>
     </Avatar>

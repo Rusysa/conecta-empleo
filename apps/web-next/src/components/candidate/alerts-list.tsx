@@ -2,26 +2,22 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { BellOff, Trash2 } from "lucide-react"
+import { Bell, Trash2 } from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { RollText } from "@/components/landing/roll-text"
 import { formatDate } from "@/lib/format"
 import { ALERT_FREQUENCY_LABELS, describeAlert } from "@/lib/job-alerts"
 import { buildJobsHref, WORK_MODE_SLUGS } from "@/lib/job-search-params"
 import type { AlertFrequency, JobAlert, WorkMode } from "@/lib/types"
+import { cn } from "@/lib/utils"
 
 const SLUG_BY_MODE = Object.fromEntries(
   Object.entries(WORK_MODE_SLUGS).map(([slug, mode]) => [mode, slug])
 ) as Record<WorkMode, string>
+
+const FREQUENCIES = Object.entries(ALERT_FREQUENCY_LABELS) as [AlertFrequency, string][]
 
 export function AlertsList({ alerts: initial }: { alerts: JobAlert[] }) {
   const [alerts, setAlerts] = useState(initial)
@@ -40,21 +36,22 @@ export function AlertsList({ alerts: initial }: { alerts: JobAlert[] }) {
 
   if (alerts.length === 0) {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed py-16 text-center">
-        <BellOff className="size-8 text-muted-foreground" aria-hidden />
-        <p className="font-medium">No tienes alertas</p>
-        <p className="max-w-sm text-sm text-muted-foreground">
-          Busca vacantes y usa “Crear alerta” para recibir por correo las nuevas que coincidan.
-        </p>
-        <Button asChild>
-          <Link href="/vacantes">Buscar vacantes</Link>
-        </Button>
+      // Sand card keeps black ink in both themes (its fill does not change at night).
+      <div className="empty text-black">
+        <span className="label">Sin alertas</span>
+        <h2 className="text-[clamp(28px,3.4vw,44px)] leading-[1.05] font-bold tracking-[-0.02em]">
+          Aún no tienes alertas
+        </h2>
+        <p>Busca vacantes y usa “Crear alerta” para recibir por correo las nuevas que coincidan.</p>
+        <Link className="pill pill--dark" href="/vacantes">
+          <RollText>Buscar vacantes</RollText>
+        </Link>
       </div>
     )
   }
 
   return (
-    <ul className="grid gap-3">
+    <ul className="grid gap-3 sm:grid-cols-2">
       {alerts.map((alert) => {
         const summary = describeAlert(alert)
         const href = buildJobsHref({
@@ -63,11 +60,24 @@ export function AlertsList({ alerts: initial }: { alerts: JobAlert[] }) {
           modalidad: alert.workMode ? SLUG_BY_MODE[alert.workMode] : undefined,
         })
         return (
-          <li key={alert.id}>
-            <Card className="flex-row flex-wrap items-center gap-x-4 gap-y-3 p-4">
+          <li
+            key={alert.id}
+            className="flex flex-col gap-4 rounded-[20px] border border-border bg-card p-5 text-card-foreground"
+          >
+            <div className="flex items-start gap-3">
+              {/* Lagoon bell: the one accent on each card. */}
+              <span
+                className="grid size-11 shrink-0 place-items-center rounded-full border border-black bg-[#12b5a5] text-black"
+                aria-hidden
+              >
+                <Bell className="size-5" strokeWidth={2.25} />
+              </span>
               <div className="min-w-0 flex-1 space-y-1">
-                <h2 className="font-semibold">
-                  <Link href={href} className="hover:underline">
+                <h2 className="text-lg leading-tight font-bold tracking-[-0.01em] break-words">
+                  <Link
+                    href={href}
+                    className="rounded-sm outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring"
+                  >
                     {summary}
                   </Link>
                 </h2>
@@ -75,21 +85,6 @@ export function AlertsList({ alerts: initial }: { alerts: JobAlert[] }) {
                   Creada el {formatDate(alert.createdAt)}
                 </p>
               </div>
-              <Select
-                value={alert.frequency}
-                onValueChange={(v) => setFrequency(alert.id, v as AlertFrequency)}
-              >
-                <SelectTrigger size="sm" className="w-32" aria-label={`Frecuencia de ${summary}`}>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.entries(ALERT_FREQUENCY_LABELS).map(([value, label]) => (
-                    <SelectItem key={value} value={value}>
-                      {label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
               <Button
                 variant="ghost"
                 size="icon-sm"
@@ -98,7 +93,37 @@ export function AlertsList({ alerts: initial }: { alerts: JobAlert[] }) {
               >
                 <Trash2 />
               </Button>
-            </Card>
+            </div>
+
+            <div
+              role="group"
+              aria-label={`Frecuencia de ${summary}`}
+              className="mt-auto flex flex-wrap items-center gap-2"
+            >
+              <span className="label text-muted-foreground" aria-hidden>
+                Correo
+              </span>
+              {FREQUENCIES.map(([value, label]) => {
+                const selected = alert.frequency === value
+                return (
+                  <button
+                    key={value}
+                    type="button"
+                    aria-pressed={selected}
+                    onClick={() => !selected && setFrequency(alert.id, value)}
+                    className={cn(
+                      "inline-flex h-9 items-center rounded-full border px-4 text-xs leading-none font-bold tracking-[0.032em] uppercase outline-none transition-colors",
+                      "focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card",
+                      selected
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-card text-card-foreground hover:bg-accent hover:text-accent-foreground"
+                    )}
+                  >
+                    {label}
+                  </button>
+                )
+              })}
+            </div>
           </li>
         )
       })}

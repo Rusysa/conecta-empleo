@@ -2,6 +2,7 @@ import { Suspense } from "react"
 import type { Metadata } from "next"
 
 import { AdminCompaniesTable } from "@/components/admin/admin-companies-table"
+import { PanelHeader, PanelSkeleton } from "@/components/company/island-ui"
 import { requireAdmin } from "@/lib/authz"
 import { getAdminCompanies } from "@/server/queries/admin"
 
@@ -16,15 +17,12 @@ async function CompaniesContent() {
 export default function AdminCompaniesPage() {
   return (
     <>
-      <div className="space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight">Empresas</h1>
-        <p className="text-muted-foreground">
-          Verifica a las empresas reales para mostrar su insignia en las vacantes.
-        </p>
-      </div>
-      <Suspense
-        fallback={<div className="h-64 animate-pulse rounded-xl bg-muted" aria-busy="true" />}
-      >
+      <PanelHeader
+        eyebrow="Administración"
+        title="Empresas"
+        description="Verifica a las empresas reales para mostrar su insignia en las vacantes."
+      />
+      <Suspense fallback={<PanelSkeleton className="h-64" aria-busy="true" />}>
         <CompaniesContent />
       </Suspense>
     </>

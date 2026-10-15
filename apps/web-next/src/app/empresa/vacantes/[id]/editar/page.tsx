@@ -2,9 +2,9 @@ import { Suspense } from "react"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
-import { Card, CardContent } from "@/components/ui/card"
 import { JobForm } from "@/components/jobs/job-form"
-import { JobStatusBadge } from "@/components/jobs/job-status-badge"
+import { PanelHeader, PanelSkeleton } from "@/components/company/island-ui"
+import { JobStatusChip } from "@/components/company/job-status-chip"
 import { requireCompany } from "@/lib/authz"
 import { getCompanyJob } from "@/server/queries/company"
 
@@ -21,40 +21,36 @@ async function EditJobContent({
 
   return (
     <>
-      <div className="flex flex-wrap items-center gap-3">
-        <h1 className="text-2xl font-bold tracking-tight">Editar vacante</h1>
-        <JobStatusBadge status={job.status} />
+      <PanelHeader
+        eyebrow="Vacantes"
+        title="Editar vacante"
+        aside={<JobStatusChip status={job.status} />}
+        description={job.title}
+      />
+      <div className="max-w-3xl">
+        <JobForm
+          mode="edit"
+          jobId={job.id}
+          status={job.status}
+          defaultValues={{
+            title: job.title,
+            description: job.description,
+            requirements: job.requirements,
+            location: job.location ?? "",
+            workMode: job.workMode,
+            employmentType: job.employmentType,
+            salaryMin: job.salaryMin?.toString() ?? "",
+            salaryMax: job.salaryMax?.toString() ?? "",
+          }}
+        />
       </div>
-      <Card className="max-w-3xl">
-        <CardContent>
-          <JobForm
-            mode="edit"
-            jobId={job.id}
-            status={job.status}
-            defaultValues={{
-              title: job.title,
-              description: job.description,
-              requirements: job.requirements,
-              location: job.location ?? "",
-              workMode: job.workMode,
-              employmentType: job.employmentType,
-              salaryMin: job.salaryMin?.toString() ?? "",
-              salaryMax: job.salaryMax?.toString() ?? "",
-            }}
-          />
-        </CardContent>
-      </Card>
     </>
   )
 }
 
 export default function EditJobPage({ params }: PageProps<"/empresa/vacantes/[id]/editar">) {
   return (
-    <Suspense
-      fallback={
-        <div className="h-[40rem] max-w-3xl animate-pulse rounded-xl bg-muted" aria-busy="true" />
-      }
-    >
+    <Suspense fallback={<PanelSkeleton className="h-[40rem] max-w-3xl" aria-busy="true" />}>
       <EditJobContent params={params} />
     </Suspense>
   )

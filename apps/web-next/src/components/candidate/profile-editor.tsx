@@ -41,10 +41,10 @@ export function ProfileEditor({ email, profile, cv: initialCv, next }: Props) {
   return (
     <div className="space-y-6">
       {!complete && (
-        <Card className="border-primary/30 bg-primary/5">
+        <Card className="bg-secondary text-secondary-foreground">
           <CardHeader>
             <CardTitle>Completa tu perfil para poder aplicar</CardTitle>
-            {/* Darker than muted-foreground: muted text on the tinted banner fails AA contrast. */}
+            {/* Darker than muted-foreground: muted text on the sand banner fails AA contrast. */}
             <CardDescription className="text-foreground/80">
               Las empresas recibirán estos datos cuando apliques.
             </CardDescription>
@@ -59,7 +59,7 @@ export function ProfileEditor({ email, profile, cv: initialCv, next }: Props) {
       )}
 
       {complete && next && (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-card p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-[20px] border bg-card p-4">
           <p className="text-sm">Tu perfil está completo.</p>
           <Button asChild>
             <Link href={next}>

@@ -2,6 +2,9 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { CircleCheck } from "lucide-react"
+
+import { AuthAlert, authInputClass } from "@/components/auth/auth-shell"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -40,8 +43,11 @@ export function ProfileForm({ user }: { user: User }) {
   }
   return (
     <form onSubmit={submit} className="space-y-5">
-      <p className="text-sm text-muted-foreground">
-        {user.email} · {user.role === "candidate" ? "Candidato" : "Empresa"}
+      <p className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+        <span className="break-all">{user.email}</span>
+        <span className="label rounded-full border border-black bg-lavender px-2.5 py-1 text-black">
+          {user.role === "candidate" ? "Candidato" : "Empresa"}
+        </span>
       </p>
       <div className="space-y-2">
         <Label htmlFor="name">Nombre</Label>
@@ -52,13 +58,21 @@ export function ProfileForm({ user }: { user: User }) {
           minLength={2}
           maxLength={100}
           required
+          className={authInputClass}
         />
       </div>
       <div className="space-y-2">
         <Label htmlFor="bio">
           {user.role === "candidate" ? "Acerca de ti" : "Acerca de tu empresa"}
         </Label>
-        <Textarea id="bio" name="bio" defaultValue={user.bio} maxLength={2000} rows={5} />
+        <Textarea
+          id="bio"
+          name="bio"
+          defaultValue={user.bio}
+          maxLength={2000}
+          rows={5}
+          className="rounded-xl px-3.5 py-2.5"
+        />
       </div>
       {user.role === "candidate" && (
         <div className="space-y-2">
@@ -71,20 +85,18 @@ export function ProfileForm({ user }: { user: User }) {
             defaultValue={user.resumeUrl}
             maxLength={2048}
             placeholder="https://…"
+            className={authInputClass}
           />
         </div>
       )}
-      {error && (
-        <p role="alert" className="text-sm text-destructive">
-          {error}
-        </p>
-      )}
+      {error && <AuthAlert>{error}</AuthAlert>}
       {saved && (
-        <p role="status" className="text-sm">
+        <p role="status" className="flex items-center gap-2 text-sm font-semibold">
+          <CircleCheck className="size-5 text-lagoon-deep dark:text-lagoon" aria-hidden />
           Perfil guardado.
         </p>
       )}
-      <Button type="submit" disabled={pending}>
+      <Button type="submit" size="lg" className="h-12 px-6 text-[13px]" disabled={pending}>
         {pending ? "Guardando…" : "Guardar perfil"}
       </Button>
     </form>

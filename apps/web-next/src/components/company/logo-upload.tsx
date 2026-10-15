@@ -52,7 +52,7 @@ export function LogoUpload({ name, logoUrl }: { name: string; logoUrl: string | 
     <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
       <CompanyLogo
         company={{ name: name || "?", logoUrl: preview ?? logoUrl }}
-        className="size-16"
+        className="size-20"
       />
       <Field data-invalid={Boolean(error)} className="flex-1">
         <FieldLabel htmlFor="logo">Logotipo</FieldLabel>
@@ -67,7 +67,13 @@ export function LogoUpload({ name, logoUrl }: { name: string; logoUrl: string | 
             aria-describedby="logo-help"
             className="max-w-xs"
           />
-          <Button type="button" variant="outline" onClick={upload} disabled={!file || uploading}>
+          <Button
+            type="button"
+            variant="outline"
+            className="h-9 px-4"
+            onClick={upload}
+            disabled={!file || uploading}
+          >
             {uploading ? <Loader2 className="animate-spin" /> : <Upload />}
             Subir logotipo
           </Button>

@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
 
+import { authInputClass, authSubmitClass } from "@/components/auth/auth-shell"
 import { Button } from "@/components/ui/button"
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
@@ -44,6 +45,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
                 type="password"
                 autoComplete="new-password"
                 aria-invalid={fieldState.invalid}
+                className={authInputClass}
               />
               <FieldDescription>Mínimo 8 caracteres.</FieldDescription>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -62,12 +64,18 @@ export function ResetPasswordForm({ token }: { token: string }) {
                 type="password"
                 autoComplete="new-password"
                 aria-invalid={fieldState.invalid}
+                className={authInputClass}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
-        <Button type="submit" size="lg" disabled={form.formState.isSubmitting}>
+        <Button
+          type="submit"
+          size="lg"
+          className={authSubmitClass}
+          disabled={form.formState.isSubmitting}
+        >
           {form.formState.isSubmitting && <Loader2 className="animate-spin" />}
           Guardar contraseña
         </Button>

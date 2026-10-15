@@ -6,6 +6,7 @@ import "@/components/landing/landing.css"
 import { anton, inter } from "@/components/island/fonts"
 import { IslandFooter } from "@/components/island/island-footer"
 import { IslandHeader } from "@/components/island/island-header"
+import { LandingArtDefs } from "@/components/landing/landing-art"
 import { ThemeProvider } from "@/components/layout/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { APP_URL } from "@/lib/app-url"
@@ -36,6 +37,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ThemeProvider>
           {/* Island design system root: frames on black, pill nav and footer (landing.css). */}
           <div className="lp flex min-h-screen flex-col">
+            {/* Sticker symbols (<use href="#s-…">) and SVG filters, available on every page. */}
+            <LandingArtDefs />
             <IslandHeader />
             <main className="flex-1">{children}</main>
             <IslandFooter />

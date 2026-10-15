@@ -1,10 +1,11 @@
 import { Suspense } from "react"
 import type { Metadata } from "next"
 import Link from "next/link"
+import { CircleX } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { AuthFormSkeleton, AuthShell } from "@/components/auth/auth-shell"
 import { ResetPasswordForm } from "@/components/auth/reset-password-form"
+import { RollText } from "@/components/landing/roll-text"
 
 export const metadata: Metadata = { title: "Nueva contraseña", robots: { index: false } }
 
@@ -13,11 +14,17 @@ async function ResetContent({ searchParams }: Pick<PageProps<"/recuperar/nueva">
   // TODO(backend): verify the token (exists, not expired, not used) before showing the form.
   if (typeof token !== "string" || token.length < 16) {
     return (
-      <div role="alert" className="space-y-4 text-center">
-        <p>Este enlace no es válido o ya expiró.</p>
-        <Button asChild>
-          <Link href="/recuperar">Solicitar un enlace nuevo</Link>
-        </Button>
+      <div
+        role="alert"
+        className="flex flex-col items-start gap-4 rounded-2xl border border-destructive bg-destructive/10 p-5"
+      >
+        <p className="flex items-start gap-3 font-semibold">
+          <CircleX className="mt-px size-5 shrink-0 text-destructive" aria-hidden />
+          Este enlace no es válido o ya expiró.
+        </p>
+        <Link href="/recuperar" className="pill pill--sm pill--dark">
+          <RollText>Solicitar un enlace nuevo</RollText>
+        </Link>
       </div>
     )
   }
@@ -26,22 +33,25 @@ async function ResetContent({ searchParams }: Pick<PageProps<"/recuperar/nueva">
 
 export default function ResetPasswordPage({ searchParams }: PageProps<"/recuperar/nueva">) {
   return (
-    <div className="mx-auto max-w-md px-4 py-12">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">
-            <h1>Crea una nueva contraseña</h1>
-          </CardTitle>
-          <CardDescription>Elige una contraseña que no uses en otros sitios.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Suspense
-            fallback={<div className="h-56 animate-pulse rounded-lg bg-muted" aria-busy="true" />}
-          >
-            <ResetContent searchParams={searchParams} />
-          </Suspense>
-        </CardContent>
-      </Card>
-    </div>
+    <AuthShell
+      kicker="Acceso"
+      title="Crea una nueva contraseña"
+      description="Elige una contraseña que no uses en otros sitios."
+      panel={{
+        tone: "sand",
+        kicker: "Casi listo",
+        line: "Nueva llave para tu cabaña.",
+        points: [
+          "Mínimo 8 caracteres",
+          "Mejor si mezclas letras, números y símbolos",
+          "Que no sea la misma de otros sitios",
+        ],
+        stickers: [{ name: "check", className: "-top-3 -right-3 w-28 sm:w-32", rotate: 10 }],
+      }}
+    >
+      <Suspense fallback={<AuthFormSkeleton className="h-64" />}>
+        <ResetContent searchParams={searchParams} />
+      </Suspense>
+    </AuthShell>
   )
 }

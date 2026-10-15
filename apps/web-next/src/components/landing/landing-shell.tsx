@@ -1,4 +1,3 @@
-import { LandingArtDefs } from "@/components/landing/landing-art"
 import { LandingMotion } from "@/components/landing/landing-motion"
 
 const MARQUEE = [
@@ -10,7 +9,7 @@ const MARQUEE = [
 ]
 
 /**
- * Full-bleed island pages ("/" and "/vacantes"): sticker art, scroll motion and, on the
+ * Full-bleed island pages ("/" and "/vacantes"): scroll motion and, on the
  * home page, the marquee. The site-wide nav and footer come from the root layout.
  */
 export function LandingShell({
@@ -24,7 +23,6 @@ export function LandingShell({
 }) {
   return (
     <div id={id} className="landing">
-      <LandingArtDefs />
       <LandingMotion rootId={id} />
 
       {home && (

@@ -15,7 +15,7 @@ export type SectionLink = {
 
 type Props = { label: string; links: SectionLink[] }
 
-/** Underlined tab-style navigation for the candidate and company areas. */
+/** Island pill tabs for the candidate, company and admin areas. */
 export function SectionNav(props: Props) {
   // usePathname() is request data on dynamic routes (Cache Components), so it needs
   // a Suspense boundary; the fallback renders the same tabs without the active state.
@@ -32,29 +32,38 @@ function ActiveNavTabs(props: Props) {
 
 function NavTabs({ label, links, pathname }: Props & { pathname: string | null }) {
   return (
-    <nav aria-label={label} className="flex gap-1 overflow-x-auto overflow-y-hidden border-b">
-      {links.map((link) => {
-        const active =
-          pathname !== null &&
-          (link.exact
-            ? pathname === link.href
-            : pathname === link.href || pathname.startsWith(`${link.href}/`))
-        return (
-          <Link
-            key={link.href}
-            href={link.href}
-            aria-current={active ? "page" : undefined}
-            className={cn(
-              "-mb-px shrink-0 border-b-2 px-3 py-2 text-sm font-medium outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50",
-              active
-                ? "border-primary text-foreground"
-                : "border-transparent text-muted-foreground hover:text-foreground"
-            )}
-          >
-            {link.label}
-          </Link>
-        )
-      })}
+    // Bleeds to the frame edge on mobile so the row scrolls sideways instead of wrapping;
+    // the vertical padding keeps the focus ring from being clipped by the scroll container.
+    <nav
+      aria-label={label}
+      className="-mx-4 overflow-x-auto overflow-y-hidden px-4 py-1 [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden"
+    >
+      <ul className="flex w-max gap-2">
+        {links.map((link) => {
+          const active =
+            pathname !== null &&
+            (link.exact
+              ? pathname === link.href
+              : pathname === link.href || pathname.startsWith(`${link.href}/`))
+          return (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "inline-flex h-11 items-center rounded-full border px-5 text-[13px] leading-none font-bold tracking-[0.032em] whitespace-nowrap uppercase outline-none transition-colors",
+                  "focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                  active
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-card text-card-foreground hover:bg-accent hover:text-accent-foreground"
+                )}
+              >
+                {link.label}
+              </Link>
+            </li>
+          )
+        })}
+      </ul>
     </nav>
   )
 }

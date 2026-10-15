@@ -28,6 +28,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { EMPLOYMENT_TYPE_LABELS, WORK_MODE_LABELS } from "@/lib/constants"
 import type { JobStatus } from "@/lib/types"
+import { cn } from "@/lib/utils"
 import { jobSchema, type JobInput } from "@/lib/validations/job"
 
 type Props =
@@ -41,6 +42,48 @@ const EMPTY: Partial<JobInput> = {
   location: "",
   salaryMin: "",
   salaryMax: "",
+}
+
+const STEP_FILL = ["bg-lagoon", "bg-sunburst", "bg-lavender"] as const
+
+/** One outlined block of the form: a numbered island sticker, an Anton title and a hint. */
+function FormSection({
+  step,
+  title,
+  hint,
+  children,
+}: {
+  step: 1 | 2 | 3
+  title: string
+  hint: string
+  children: React.ReactNode
+}) {
+  const id = `job-form-step-${step}`
+  return (
+    <section
+      aria-labelledby={id}
+      className="rounded-[20px] border border-border bg-card p-5 text-card-foreground sm:p-7"
+    >
+      <div className="mb-6 flex items-start gap-4">
+        <span
+          aria-hidden
+          className={cn(
+            "grid size-11 shrink-0 place-items-center rounded-full border border-black font-display text-xl text-black",
+            STEP_FILL[step - 1]
+          )}
+        >
+          {step}
+        </span>
+        <div className="space-y-1">
+          <h2 id={id} className="font-display text-2xl leading-none uppercase sm:text-3xl">
+            {title}
+          </h2>
+          <p className="text-sm text-muted-foreground">{hint}</p>
+        </div>
+      </div>
+      <FieldGroup>{children}</FieldGroup>
+    </section>
+  )
 }
 
 export function JobForm({ mode, defaultValues, jobId, status }: Props) {
@@ -72,8 +115,8 @@ export function JobForm({ mode, defaultValues, jobId, status }: Props) {
   }
 
   return (
-    <form onSubmit={submitAs(status ?? "ACTIVE")} noValidate>
-      <FieldGroup>
+    <form onSubmit={submitAs(status ?? "ACTIVE")} noValidate className="space-y-5">
+      <FormSection step={1} title="Lo básico" hint="Cómo se llama el puesto y dónde se trabaja.">
         <Controller
           name="title"
           control={form.control}
@@ -165,7 +208,13 @@ export function JobForm({ mode, defaultValues, jobId, status }: Props) {
             </Field>
           )}
         />
+      </FormSection>
 
+      <FormSection
+        step={2}
+        title="Salario"
+        hint="Opcional, pero las vacantes con sueldo visible reciben más postulantes."
+      >
         <FieldSet>
           <FieldLegend variant="label">Salario mensual en MXN (opcional)</FieldLegend>
           <div className="grid gap-6 sm:grid-cols-2">
@@ -193,7 +242,13 @@ export function JobForm({ mode, defaultValues, jobId, status }: Props) {
             ))}
           </div>
         </FieldSet>
+      </FormSection>
 
+      <FormSection
+        step={3}
+        title="La vacante"
+        hint="Lo que hará la persona y lo que necesitas de ella."
+      >
         <Controller
           name="description"
           control={form.control}
@@ -233,34 +288,35 @@ export function JobForm({ mode, defaultValues, jobId, status }: Props) {
             </Field>
           )}
         />
+      </FormSection>
 
-        <div className="flex flex-wrap gap-2">
-          {mode === "create" ? (
-            <>
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting && <Loader2 className="animate-spin" />}
-                Publicar
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                disabled={isSubmitting}
-                onClick={submitAs("DRAFT")}
-              >
-                Guardar borrador
-              </Button>
-            </>
-          ) : (
-            <Button type="submit" disabled={isSubmitting}>
+      <div className="flex flex-wrap items-center gap-2 rounded-[20px] border border-border bg-secondary p-4 text-secondary-foreground sm:p-5">
+        {mode === "create" ? (
+          <>
+            <Button type="submit" className="h-11 px-6" disabled={isSubmitting}>
               {isSubmitting && <Loader2 className="animate-spin" />}
-              Guardar cambios
+              Publicar
             </Button>
-          )}
-          <Button variant="ghost" asChild>
-            <Link href="/empresa/vacantes">Cancelar</Link>
+            <Button
+              type="button"
+              variant="outline"
+              className="h-11 px-6"
+              disabled={isSubmitting}
+              onClick={submitAs("DRAFT")}
+            >
+              Guardar borrador
+            </Button>
+          </>
+        ) : (
+          <Button type="submit" className="h-11 px-6" disabled={isSubmitting}>
+            {isSubmitting && <Loader2 className="animate-spin" />}
+            Guardar cambios
           </Button>
-        </div>
-      </FieldGroup>
+        )}
+        <Button variant="ghost" className="h-11 px-5 sm:ml-auto" asChild>
+          <Link href="/empresa/vacantes">Cancelar</Link>
+        </Button>
+      </div>
     </form>
   )
 }

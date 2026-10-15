@@ -54,7 +54,7 @@ export function CvUpload({
   return (
     <div className="grid gap-6">
       {current ? (
-        <div className="flex flex-wrap items-center gap-3 rounded-lg border p-3">
+        <div className="flex flex-wrap items-center gap-3 rounded-[20px] border bg-card p-3">
           <FileText className="size-8 shrink-0 text-primary" aria-hidden />
           <div className="min-w-0 flex-1">
             <p className="truncate font-medium">{current.fileName}</p>
@@ -75,7 +75,7 @@ export function CvUpload({
           </Button>
         </div>
       ) : (
-        <p className="rounded-lg border border-dashed p-4 text-sm text-muted-foreground">
+        <p className="rounded-[20px] border border-dashed bg-secondary p-4 text-sm text-secondary-foreground">
           Aún no has subido tu CV. Lo necesitas para aplicar a vacantes.
         </p>
       )}

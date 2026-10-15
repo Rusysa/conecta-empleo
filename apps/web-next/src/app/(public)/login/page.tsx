@@ -1,7 +1,7 @@
 import { Suspense } from "react"
 import type { Metadata } from "next"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { AuthFormSkeleton, AuthShell } from "@/components/auth/auth-shell"
 import { LoginForm } from "@/components/auth/login-form"
 
 export const metadata: Metadata = { title: "Iniciar sesión" }
@@ -13,20 +13,28 @@ async function LoginFormWithParams({ searchParams }: Pick<PageProps<"/login">, "
 
 export default function LoginPage({ searchParams }: PageProps<"/login">) {
   return (
-    <div className="mx-auto max-w-md px-4 py-12">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">
-            <h1>Iniciar sesión</h1>
-          </CardTitle>
-          <CardDescription>Accede para aplicar o gestionar tus vacantes.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Suspense fallback={<div className="h-56 animate-pulse rounded-lg bg-muted" />}>
-            <LoginFormWithParams searchParams={searchParams} />
-          </Suspense>
-        </CardContent>
-      </Card>
-    </div>
+    <AuthShell
+      kicker="Bienvenido de vuelta"
+      title="Iniciar sesión"
+      description="Accede para aplicar o gestionar tus vacantes."
+      panel={{
+        tone: "lagoon",
+        kicker: "Bolsa de trabajo de la isla",
+        line: "Tu próximo empleo ya llegó a la orilla.",
+        points: [
+          "Aplica con el CV que ya guardaste",
+          "Sigue en qué va cada postulación",
+          "Empresas: vacantes y postulantes en un lugar",
+        ],
+        stickers: [
+          { name: "case", className: "-top-3 -right-4 w-28 sm:w-36", rotate: 12 },
+          { name: "coin", className: "right-6 bottom-6 hidden w-20 sm:block", rotate: -8 },
+        ],
+      }}
+    >
+      <Suspense fallback={<AuthFormSkeleton className="h-72" />}>
+        <LoginFormWithParams searchParams={searchParams} />
+      </Suspense>
+    </AuthShell>
   )
 }

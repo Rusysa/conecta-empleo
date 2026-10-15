@@ -6,6 +6,13 @@ import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2 } from "lucide-react"
 
+import {
+  AuthAlert,
+  AuthSwitch,
+  authInputClass,
+  authLinkClass,
+  authSubmitClass,
+} from "@/components/auth/auth-shell"
 import { Button } from "@/components/ui/button"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
@@ -34,11 +41,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
       <FieldGroup>
-        {form.formState.errors.root && (
-          <p role="alert" className="text-sm text-destructive">
-            {form.formState.errors.root.message}
-          </p>
-        )}
+        {form.formState.errors.root && <AuthAlert>{form.formState.errors.root.message}</AuthAlert>}
         <Controller
           name="email"
           control={form.control}
@@ -51,6 +54,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
                 type="email"
                 autoComplete="email"
                 aria-invalid={fieldState.invalid}
+                className={authInputClass}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
@@ -61,12 +65,9 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
                 <FieldLabel htmlFor="password">Contraseña</FieldLabel>
-                <Link
-                  href="/recuperar"
-                  className="text-sm text-muted-foreground underline-offset-4 hover:underline"
-                >
+                <Link href="/recuperar" className={`text-sm ${authLinkClass}`}>
                   ¿Olvidaste tu contraseña?
                 </Link>
               </div>
@@ -76,24 +77,22 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
                 type="password"
                 autoComplete="current-password"
                 aria-invalid={fieldState.invalid}
+                className={authInputClass}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
-        <Button type="submit" size="lg" disabled={form.formState.isSubmitting}>
+        <Button
+          type="submit"
+          size="lg"
+          className={authSubmitClass}
+          disabled={form.formState.isSubmitting}
+        >
           {form.formState.isSubmitting && <Loader2 className="animate-spin" />}
           Iniciar sesión
         </Button>
-        <p className="text-center text-sm text-muted-foreground">
-          ¿No tienes cuenta?{" "}
-          <Link
-            href="/registro"
-            className="font-medium text-foreground underline-offset-4 hover:underline"
-          >
-            Regístrate
-          </Link>
-        </p>
+        <AuthSwitch question="¿No tienes cuenta?" href="/registro" cta="Regístrate" />
       </FieldGroup>
     </form>
   )

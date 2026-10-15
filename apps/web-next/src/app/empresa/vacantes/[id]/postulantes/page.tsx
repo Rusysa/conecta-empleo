@@ -6,7 +6,8 @@ import { ArrowLeft } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { ApplicantsTable } from "@/components/applications/applicants-table"
-import { JobStatusBadge } from "@/components/jobs/job-status-badge"
+import { PanelHeader, PanelSkeleton } from "@/components/company/island-ui"
+import { JobStatusChip } from "@/components/company/job-status-chip"
 import { requireCompany } from "@/lib/authz"
 import { getJobApplicants } from "@/server/queries/company"
 
@@ -21,15 +22,21 @@ async function ApplicantsContent({
   const data = await getJobApplicants(session.companyId, id)
   if (!data) notFound()
 
+  const count = data.applicants.length
+
   return (
     <>
-      <div className="space-y-1">
-        <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-2xl font-bold tracking-tight">{data.job.title}</h1>
-          <JobStatusBadge status={data.job.status} />
-        </div>
-        <p className="text-muted-foreground">Postulantes</p>
-      </div>
+      <PanelHeader
+        eyebrow="Postulantes"
+        title={data.job.title}
+        compact
+        aside={<JobStatusChip status={data.job.status} />}
+        description={
+          count === 0
+            ? "Todavía nadie se ha postulado a esta vacante."
+            : `${count} ${count === 1 ? "persona se postuló" : "personas se postularon"} a esta vacante.`
+        }
+      />
       <ApplicantsTable applicants={data.applicants} fileBaseName={`postulantes-${data.job.slug}`} />
     </>
   )
@@ -40,16 +47,16 @@ export default function JobApplicantsPage({
 }: PageProps<"/empresa/vacantes/[id]/postulantes">) {
   return (
     <>
-      <Button variant="ghost" size="sm" className="self-start" asChild>
+      <Button variant="outline" size="sm" className="h-9 self-start px-4" asChild>
         <Link href="/empresa/vacantes">
           <ArrowLeft /> Volver a vacantes
         </Link>
       </Button>
       <Suspense
         fallback={
-          <div className="space-y-4" aria-busy="true" aria-label="Cargando postulantes">
-            <div className="h-9 w-72 animate-pulse rounded-lg bg-muted" />
-            <div className="h-80 animate-pulse rounded-xl bg-muted" />
+          <div className="space-y-6" aria-busy="true" aria-label="Cargando postulantes">
+            <PanelSkeleton className="h-20 max-w-xl" />
+            <PanelSkeleton className="h-80" />
           </div>
         }
       >

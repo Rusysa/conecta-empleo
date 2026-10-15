@@ -23,11 +23,18 @@ import {
 } from "@/components/ui/table"
 import { StatusBadge } from "@/components/applications/status-badge"
 import { StatusSelect } from "@/components/applications/status-select"
+import {
+  fillChip,
+  FilterPills,
+  IslandEmpty,
+  IslandPanel,
+  TABLE_BODY,
+  TABLE_HEAD,
+} from "@/components/company/island-ui"
 import { APPLICATION_STATUS_LABELS } from "@/lib/constants"
 import { downloadCsv, toCsv } from "@/lib/csv"
 import { formatDate } from "@/lib/format"
 import type { Application, ApplicationStatus } from "@/lib/types"
-import { cn } from "@/lib/utils"
 
 type Filter = "ALL" | ApplicationStatus
 const FILTERS: Filter[] = ["ALL", "SUBMITTED", "VIEWED", "IN_PROCESS", "REJECTED", "HIRED"]
@@ -89,40 +96,29 @@ export function ApplicantsTable({
 
   if (applicants.length === 0) {
     return (
-      <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed py-16 text-center">
-        <Inbox className="size-8 text-muted-foreground" aria-hidden />
-        <p className="font-medium">Esta vacante aún no tiene postulantes</p>
-      </div>
+      <IslandEmpty
+        icon={<Inbox />}
+        title="Esta vacante aún no tiene postulantes"
+        description="Cuando alguien se postule, verás aquí sus datos de contacto y su CV."
+      />
     )
   }
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div role="group" aria-label="Filtrar por estado" className="flex flex-wrap gap-2">
-          {FILTERS.map((f) => (
-            <Button
-              key={f}
-              size="sm"
-              variant={filter === f ? "default" : "outline"}
-              aria-pressed={filter === f}
-              onClick={() => setFilter(f)}
-            >
-              {f === "ALL" ? "Todas" : APPLICATION_STATUS_LABELS[f]}
-              <span
-                className={cn(
-                  "tabular-nums",
-                  filter === f ? "opacity-80" : "text-muted-foreground"
-                )}
-              >
-                {counts[f]}
-              </span>
-            </Button>
-          ))}
-        </div>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <FilterPills
+          label="Filtrar por estado"
+          value={filter}
+          onChange={setFilter}
+          options={FILTERS.map((f) => ({
+            value: f,
+            label: f === "ALL" ? "Todas" : APPLICATION_STATUS_LABELS[f],
+            count: counts[f],
+          }))}
+        />
         <Button
-          variant="outline"
-          size="sm"
+          className="h-10 px-5"
           disabled={visible.length === 0}
           onClick={() => exportCsv(visible, fileBaseName)}
         >
@@ -130,21 +126,21 @@ export function ApplicantsTable({
         </Button>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border">
+      <IslandPanel>
         <Table>
-          <TableHeader>
+          <TableHeader className={TABLE_HEAD}>
             <TableRow>
               <TableHead>Nombre</TableHead>
               <TableHead>Correo</TableHead>
               <TableHead>Teléfono</TableHead>
               <TableHead>Fecha</TableHead>
               <TableHead>Estado</TableHead>
-              <TableHead>
+              <TableHead className="text-right">
                 <span className="sr-only">Acciones</span>
               </TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody className={TABLE_BODY}>
             {visible.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
@@ -154,25 +150,33 @@ export function ApplicantsTable({
             ) : (
               visible.map((app) => (
                 <TableRow key={app.id}>
-                  <TableCell className="font-medium">
-                    <button
-                      type="button"
-                      className="rounded-sm text-left outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
-                      onClick={() => openDetail(app)}
-                    >
-                      {app.fullName}
-                    </button>
-                    {app.status === "SUBMITTED" && (
-                      <span className="ml-2 text-xs font-normal text-primary">Nuevo</span>
-                    )}
+                  <TableCell>
+                    <span className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        className="rounded-sm text-left font-semibold underline-offset-4 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
+                        onClick={() => openDetail(app)}
+                      >
+                        {app.fullName}
+                      </button>
+                      {app.status === "SUBMITTED" && (
+                        <span className={fillChip("sunburst")}>Nuevo</span>
+                      )}
+                    </span>
                   </TableCell>
                   <TableCell>
-                    <a href={`mailto:${app.email}`} className="hover:underline">
+                    <a
+                      href={`mailto:${app.email}`}
+                      className="rounded-sm underline-offset-4 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
+                    >
                       {app.email}
                     </a>
                   </TableCell>
                   <TableCell>
-                    <a href={`tel:${app.phone.replace(/\s/g, "")}`} className="hover:underline">
+                    <a
+                      href={`tel:${app.phone.replace(/\s/g, "")}`}
+                      className="rounded-sm tabular-nums underline-offset-4 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
+                    >
                       {app.phone}
                     </a>
                   </TableCell>
@@ -186,12 +190,17 @@ export function ApplicantsTable({
                       label={`Estado de ${app.fullName}`}
                     />
                   </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-1">
-                      <Button variant="ghost" size="sm" onClick={() => openDetail(app)}>
+                  <TableCell>
+                    <div className="flex justify-end gap-1.5">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-9 px-4"
+                        onClick={() => openDetail(app)}
+                      >
                         Detalle
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => openCv(app)}>
+                      <Button size="sm" className="h-9 px-4" onClick={() => openCv(app)}>
                         <FileText /> Ver CV
                       </Button>
                     </div>
@@ -201,7 +210,7 @@ export function ApplicantsTable({
             )}
           </TableBody>
         </Table>
-      </div>
+      </IslandPanel>
 
       <Dialog open={detail !== null} onOpenChange={(open) => !open && setDetailId(null)}>
         {detail && (
@@ -230,7 +239,7 @@ export function ApplicantsTable({
             </dl>
             <div className="space-y-1">
               <p className="text-sm font-medium">Mensaje</p>
-              <p className="rounded-lg bg-muted p-3 text-sm whitespace-pre-line text-muted-foreground">
+              <p className="rounded-2xl border border-border bg-secondary p-4 text-sm whitespace-pre-line text-secondary-foreground">
                 {detail.message ?? "El candidato no dejó mensaje."}
               </p>
             </div>
@@ -240,7 +249,7 @@ export function ApplicantsTable({
                 onChange={(s) => setStatus(detail.id, s)}
                 label={`Estado de ${detail.fullName}`}
               />
-              <Button onClick={() => openCv(detail)}>
+              <Button className="h-10 px-5" onClick={() => openCv(detail)}>
                 <FileText /> Ver CV
               </Button>
             </DialogFooter>

@@ -25,11 +25,11 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Textarea } from "@/components/ui/textarea"
-import { JobStatusBadge } from "@/components/jobs/job-status-badge"
+import { FilterPills, IslandPanel, TABLE_BODY, TABLE_HEAD } from "@/components/company/island-ui"
+import { JobStatusChip } from "@/components/company/job-status-chip"
 import { JOB_STATUS_LABELS } from "@/lib/constants"
 import { formatDate } from "@/lib/format"
 import type { JobStatus } from "@/lib/types"
-import { cn } from "@/lib/utils"
 import type { AdminJobRow } from "@/server/queries/admin"
 
 type Filter = "ALL" | JobStatus
@@ -59,40 +59,32 @@ export function AdminJobsTable({ jobs: initial }: { jobs: AdminJobRow[] }) {
 
   return (
     <div className="space-y-4">
-      <div role="group" aria-label="Filtrar por estado" className="flex flex-wrap gap-2">
-        {FILTERS.map((f) => (
-          <Button
-            key={f}
-            size="sm"
-            variant={filter === f ? "default" : "outline"}
-            aria-pressed={filter === f}
-            onClick={() => setFilter(f)}
-          >
-            {f === "ALL" ? "Todas" : JOB_STATUS_LABELS[f]}
-            <span
-              className={cn("tabular-nums", filter === f ? "opacity-80" : "text-muted-foreground")}
-            >
-              {f === "ALL" ? jobs.length : jobs.filter((j) => j.status === f).length}
-            </span>
-          </Button>
-        ))}
-      </div>
+      <FilterPills
+        label="Filtrar por estado"
+        value={filter}
+        onChange={setFilter}
+        options={FILTERS.map((f) => ({
+          value: f,
+          label: f === "ALL" ? "Todas" : JOB_STATUS_LABELS[f],
+          count: f === "ALL" ? jobs.length : jobs.filter((j) => j.status === f).length,
+        }))}
+      />
 
-      <div className="overflow-x-auto rounded-xl border">
+      <IslandPanel>
         <Table>
-          <TableHeader>
+          <TableHeader className={TABLE_HEAD}>
             <TableRow>
               <TableHead>Vacante</TableHead>
               <TableHead>Empresa</TableHead>
               <TableHead>Estado</TableHead>
               <TableHead className="text-right">Postulantes</TableHead>
               <TableHead>Creada</TableHead>
-              <TableHead>
+              <TableHead className="text-right">
                 <span className="sr-only">Acciones</span>
               </TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody className={TABLE_BODY}>
             {visible.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
@@ -102,12 +94,12 @@ export function AdminJobsTable({ jobs: initial }: { jobs: AdminJobRow[] }) {
             ) : (
               visible.map((job) => (
                 <TableRow key={job.id}>
-                  <TableCell className="max-w-64 font-medium whitespace-normal">
+                  <TableCell className="max-w-72 min-w-48 font-semibold whitespace-normal">
                     {job.status === "ACTIVE" ? (
                       <Link
                         href={`/vacantes/${job.id}`}
                         target="_blank"
-                        className="hover:underline"
+                        className="rounded-sm underline-offset-4 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
                       >
                         {job.title}
                       </Link>
@@ -117,15 +109,22 @@ export function AdminJobsTable({ jobs: initial }: { jobs: AdminJobRow[] }) {
                   </TableCell>
                   <TableCell>{job.company.name}</TableCell>
                   <TableCell>
-                    <JobStatusBadge status={job.status} />
+                    <JobStatusChip status={job.status} />
                   </TableCell>
-                  <TableCell className="text-right tabular-nums">{job.applicantCount}</TableCell>
+                  <TableCell className="text-right text-base font-bold tabular-nums">
+                    {job.applicantCount}
+                  </TableCell>
                   <TableCell className="text-muted-foreground">
                     {formatDate(job.createdAt)}
                   </TableCell>
                   <TableCell className="text-right">
                     {job.status === "ACTIVE" && (
-                      <Button variant="ghost" size="sm" onClick={() => setModerating(job)}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-9 px-4"
+                        onClick={() => setModerating(job)}
+                      >
                         <EyeOff /> Despublicar
                       </Button>
                     )}
@@ -135,7 +134,7 @@ export function AdminJobsTable({ jobs: initial }: { jobs: AdminJobRow[] }) {
             )}
           </TableBody>
         </Table>
-      </div>
+      </IslandPanel>
 
       <Dialog
         open={moderating !== null}

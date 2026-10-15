@@ -4,8 +4,6 @@ import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
 
-import { Button } from "@/components/ui/button"
-
 export function ResendVerificationButton() {
   const [sending, setSending] = useState(false)
 
@@ -18,9 +16,16 @@ export function ResendVerificationButton() {
   }
 
   return (
-    <Button size="sm" variant="outline" onClick={resend} disabled={sending}>
-      {sending && <Loader2 className="animate-spin" />}
+    // Island pill (black on the sand banner, same in both themes).
+    <button
+      type="button"
+      className="pill pill--sm pill--dark disabled:opacity-60"
+      onClick={resend}
+      disabled={sending}
+      aria-busy={sending}
+    >
+      {sending && <Loader2 className="size-4 animate-spin" aria-hidden />}
       Reenviar correo
-    </Button>
+    </button>
   )
 }

@@ -24,6 +24,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { applySchema, type ApplyInput } from "@/lib/validations/application"
 import { mockActionResult, type ActionError } from "@/lib/action-result"
 
+const TERM = "text-[11px] font-bold tracking-[0.032em] uppercase"
+
 type Props = {
   jobTitle: string
   companyName: string
@@ -58,9 +60,10 @@ export function ApplyDialog({ jobTitle, companyName, candidate }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="lg" className="w-full">
-          Aplicar
-        </Button>
+        {/* Island pill (fixed black on the sand ticket of the job page). */}
+        <button type="button" className="pill pill--dark w-full">
+          Aplicar a esta vacante
+        </button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
@@ -71,15 +74,16 @@ export function ApplyDialog({ jobTitle, companyName, candidate }: Props) {
 
           <FormAlert error={formError} />
 
-          <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 rounded-lg bg-muted p-3 text-sm">
-            <dt className="text-muted-foreground">Nombre</dt>
-            <dd>{candidate.fullName}</dd>
-            <dt className="text-muted-foreground">Correo</dt>
-            <dd className="break-all">{candidate.email}</dd>
-            <dt className="text-muted-foreground">Teléfono</dt>
-            <dd>{candidate.phone}</dd>
-            <dt className="text-muted-foreground">CV</dt>
-            <dd className="flex items-center gap-1.5">
+          {/* Fixed sand card with black ink: AA in both themes. */}
+          <dl className="grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-2.5 rounded-[20px] border border-black bg-sand p-4 text-sm text-black">
+            <dt className={TERM}>Nombre</dt>
+            <dd className="font-semibold">{candidate.fullName}</dd>
+            <dt className={TERM}>Correo</dt>
+            <dd className="font-semibold break-all">{candidate.email}</dd>
+            <dt className={TERM}>Teléfono</dt>
+            <dd className="font-semibold">{candidate.phone}</dd>
+            <dt className={TERM}>CV</dt>
+            <dd className="flex items-center gap-1.5 font-semibold">
               <FileText className="size-4" aria-hidden />
               {candidate.cvFileName}
             </dd>

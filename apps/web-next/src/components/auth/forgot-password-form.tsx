@@ -4,8 +4,15 @@ import { useState } from "react"
 import Link from "next/link"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Loader2, MailCheck } from "lucide-react"
+import { Loader2 } from "lucide-react"
 
+import {
+  AuthSwitch,
+  StickerArt,
+  authInputClass,
+  authSubmitClass,
+} from "@/components/auth/auth-shell"
+import { RollText } from "@/components/landing/roll-text"
 import { Button } from "@/components/ui/button"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
@@ -29,16 +36,19 @@ export function ForgotPasswordForm() {
   if (sentTo) {
     // Same message whether or not the account exists, to avoid revealing registered emails.
     return (
-      <div role="status" className="flex flex-col items-center gap-3 text-center">
-        <MailCheck className="size-10 text-primary" aria-hidden />
-        <p>
-          Si existe una cuenta con <span className="font-medium break-all">{sentTo}</span>, te
+      <div
+        role="status"
+        className="flex flex-col items-start gap-4 rounded-2xl border border-black bg-sand p-5 text-black"
+      >
+        <StickerArt name="check" className="w-16" rotate={-6} />
+        <p className="font-semibold">
+          Si existe una cuenta con <span className="font-bold break-all">{sentTo}</span>, te
           enviamos un enlace para crear una nueva contraseña.
         </p>
-        <p className="text-sm text-muted-foreground">Revisa también tu carpeta de spam.</p>
-        <Button variant="outline" asChild>
-          <Link href="/login">Volver a iniciar sesión</Link>
-        </Button>
+        <p className="text-sm">Revisa también tu carpeta de spam.</p>
+        <Link href="/login" className="pill pill--sm pill--dark">
+          <RollText>Volver a iniciar sesión</RollText>
+        </Link>
       </div>
     )
   }
@@ -58,23 +68,22 @@ export function ForgotPasswordForm() {
                 type="email"
                 autoComplete="email"
                 aria-invalid={fieldState.invalid}
+                className={authInputClass}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
-        <Button type="submit" size="lg" disabled={form.formState.isSubmitting}>
+        <Button
+          type="submit"
+          size="lg"
+          className={authSubmitClass}
+          disabled={form.formState.isSubmitting}
+        >
           {form.formState.isSubmitting && <Loader2 className="animate-spin" />}
           Enviar enlace
         </Button>
-        <p className="text-center text-sm text-muted-foreground">
-          <Link
-            href="/login"
-            className="font-medium text-foreground underline-offset-4 hover:underline"
-          >
-            Volver a iniciar sesión
-          </Link>
-        </p>
+        <AuthSwitch question="¿Ya la recordaste?" href="/login" cta="Inicia sesión" />
       </FieldGroup>
     </form>
   )

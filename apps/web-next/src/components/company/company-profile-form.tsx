@@ -41,7 +41,9 @@ export function CompanyProfileForm({
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
       <FieldGroup>
-        <LogoUpload name={name} logoUrl={logoUrl} />
+        <div className="rounded-[20px] border border-border bg-secondary p-5 text-secondary-foreground">
+          <LogoUpload name={name} logoUrl={logoUrl} />
+        </div>
 
         <Controller
           name="name"
@@ -120,12 +122,16 @@ export function CompanyProfileForm({
         </div>
 
         <div className="flex flex-wrap gap-2">
-          <Button type="submit" disabled={form.formState.isSubmitting || !form.formState.isDirty}>
+          <Button
+            type="submit"
+            className="h-11 px-6"
+            disabled={form.formState.isSubmitting || !form.formState.isDirty}
+          >
             {form.formState.isSubmitting && <Loader2 className="animate-spin" />}
             Guardar cambios
           </Button>
           {currentSlug && (
-            <Button variant="outline" asChild>
+            <Button variant="outline" className="h-11 px-6" asChild>
               <Link href={`/empresas/${currentSlug}`} target="_blank">
                 Ver página pública <ExternalLink />
               </Link>

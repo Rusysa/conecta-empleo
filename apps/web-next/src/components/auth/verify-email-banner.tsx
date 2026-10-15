@@ -13,11 +13,13 @@ export async function VerifyEmailBanner() {
   return (
     <div
       role="status"
-      className="flex flex-wrap items-center gap-3 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-100"
+      className="flex flex-wrap items-center gap-3 rounded-[20px] border border-black bg-sand p-4 text-sm font-semibold text-black"
     >
-      <MailWarning className="size-5 shrink-0" aria-hidden />
+      <span className="grid size-9 shrink-0 place-items-center rounded-full bg-black text-white">
+        <MailWarning className="size-4.5" aria-hidden />
+      </span>
       <p className="min-w-0 flex-1">
-        Verifica tu correo <span className="font-medium break-all">{session.email}</span> con el
+        Verifica tu correo <span className="font-bold break-all">{session.email}</span> con el
         enlace que te enviamos.
       </p>
       <ResendVerificationButton />
