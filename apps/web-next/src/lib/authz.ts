@@ -13,3 +13,11 @@ export async function requireCandidate(currentPath: string) {
   if (session.role !== "CANDIDATE") redirect("/")
   return session
 }
+
+/** Ensures the visitor is a COMPANY; otherwise redirects (to login or home). */
+export async function requireCompany(currentPath: string) {
+  const session = await getMockSession()
+  if (!session) redirect(`/login?callbackUrl=${encodeURIComponent(currentPath)}`)
+  if (session.role !== "COMPANY") redirect("/")
+  return session
+}
