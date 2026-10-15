@@ -58,6 +58,16 @@ El build genera `apps/web/dist`. No es un despliegue ni incluye el servidor API.
 
 La configuración de CI está en `docs/ci.example.yml`. Para activarla, copiarla a `.github/workflows/ci.yml` usando una credencial de GitHub con permiso `workflow`. La credencial disponible al crear el repositorio no tiene ese permiso; las comprobaciones se ejecutaron localmente.
 
+## Frontend en Next.js (`apps/web-next`)
+
+Propuesta de frontend completa en Next.js 16, con datos simulados: áreas pública, de candidato, de empresa y de administración, más pruebas unitarias, e2e y de accesibilidad.
+
+```bash
+pnpm dev:web-next   # http://localhost:3000
+```
+
+Instrucciones completas, funcionamiento por rol y guía para conectar el backend en [apps/web-next/README.md](apps/web-next/README.md).
+
 ## Trabajar en equipo
 
 1. Revisar [especificaciones](docs/SPECIFICATIONS.md) y [contrato HTTP](packages/contracts/HTTP.md).
