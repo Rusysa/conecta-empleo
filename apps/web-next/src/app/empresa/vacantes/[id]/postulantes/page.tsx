@@ -30,7 +30,7 @@ async function ApplicantsContent({
         </div>
         <p className="text-muted-foreground">Postulantes</p>
       </div>
-      <ApplicantsTable applicants={data.applicants} />
+      <ApplicantsTable applicants={data.applicants} fileBaseName={`postulantes-${data.job.slug}`} />
     </>
   )
 }

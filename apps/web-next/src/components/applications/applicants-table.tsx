@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { FileText, Inbox } from "lucide-react"
+import { Download, FileText, Inbox } from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
@@ -24,6 +24,7 @@ import {
 import { StatusBadge } from "@/components/applications/status-badge"
 import { StatusSelect } from "@/components/applications/status-select"
 import { APPLICATION_STATUS_LABELS } from "@/lib/constants"
+import { downloadCsv, toCsv } from "@/lib/csv"
 import { formatDate } from "@/lib/format"
 import type { Application, ApplicationStatus } from "@/lib/types"
 import { cn } from "@/lib/utils"
@@ -37,7 +38,29 @@ function openCv(app: Application) {
   toast.info("La descarga del CV estará disponible al conectar el almacenamiento.")
 }
 
-export function ApplicantsTable({ applicants: initial }: { applicants: Application[] }) {
+function exportCsv(rows: Application[], fileBaseName: string) {
+  const csv = toCsv(
+    ["Nombre", "Correo", "Teléfono", "Fecha de postulación", "Estado", "Mensaje"],
+    rows.map((a) => [
+      a.fullName,
+      a.email,
+      a.phone,
+      a.createdAt.toISOString().slice(0, 10),
+      APPLICATION_STATUS_LABELS[a.status],
+      a.message,
+    ])
+  )
+  downloadCsv(`${fileBaseName}-${new Date().toISOString().slice(0, 10)}.csv`, csv)
+}
+
+export function ApplicantsTable({
+  applicants: initial,
+  fileBaseName,
+}: {
+  applicants: Application[]
+  /** Used for the exported CSV file name, e.g. "postulantes-qa-tester". */
+  fileBaseName: string
+}) {
   const [applicants, setApplicants] = useState(initial)
   const [filter, setFilter] = useState<Filter>("ALL")
   const [detailId, setDetailId] = useState<string | null>(null)
@@ -72,21 +95,31 @@ export function ApplicantsTable({ applicants: initial }: { applicants: Applicati
 
   return (
     <div className="space-y-4">
-      <div role="group" aria-label="Filtrar por estado" className="flex flex-wrap gap-2">
-        {FILTERS.map((f) => (
-          <Button
-            key={f}
-            size="sm"
-            variant={filter === f ? "default" : "outline"}
-            aria-pressed={filter === f}
-            onClick={() => setFilter(f)}
-          >
-            {f === "ALL" ? "Todas" : APPLICATION_STATUS_LABELS[f]}
-            <span className={cn("tabular-nums", filter === f ? "opacity-80" : "text-muted-foreground")}>
-              {counts[f]}
-            </span>
-          </Button>
-        ))}
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div role="group" aria-label="Filtrar por estado" className="flex flex-wrap gap-2">
+          {FILTERS.map((f) => (
+            <Button
+              key={f}
+              size="sm"
+              variant={filter === f ? "default" : "outline"}
+              aria-pressed={filter === f}
+              onClick={() => setFilter(f)}
+            >
+              {f === "ALL" ? "Todas" : APPLICATION_STATUS_LABELS[f]}
+              <span className={cn("tabular-nums", filter === f ? "opacity-80" : "text-muted-foreground")}>
+                {counts[f]}
+              </span>
+            </Button>
+          ))}
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={visible.length === 0}
+          onClick={() => exportCsv(visible, fileBaseName)}
+        >
+          <Download /> Exportar CSV
+        </Button>
       </div>
 
       <div className="overflow-x-auto rounded-xl border">

@@ -1,6 +1,7 @@
 import { Suspense } from "react"
 import type { Metadata } from "next"
 
+import { DeleteAccountCard } from "@/components/candidate/delete-account-card"
 import { ProfileEditor } from "@/components/candidate/profile-editor"
 import { requireCandidate } from "@/lib/authz"
 import { safeRedirectPath } from "@/lib/safe-redirect"
@@ -17,21 +18,24 @@ async function ProfileContent({ searchParams }: Pick<PageProps<"/candidato/perfi
   if (!candidate) throw new Error("Candidate profile not found")
 
   return (
-    <ProfileEditor
-      email={candidate.email}
-      profile={{
-        fullName: candidate.fullName,
-        phone: candidate.phone,
-        city: candidate.city ?? "",
-        headline: candidate.headline ?? "",
-      }}
-      cv={
-        candidate.cvFileName && candidate.cvUpdatedAt
-          ? { fileName: candidate.cvFileName, updatedAt: candidate.cvUpdatedAt }
-          : null
-      }
-      next={safeRedirectPath(next)}
-    />
+    <>
+      <ProfileEditor
+        email={candidate.email}
+        profile={{
+          fullName: candidate.fullName,
+          phone: candidate.phone,
+          city: candidate.city ?? "",
+          headline: candidate.headline ?? "",
+        }}
+        cv={
+          candidate.cvFileName && candidate.cvUpdatedAt
+            ? { fileName: candidate.cvFileName, updatedAt: candidate.cvUpdatedAt }
+            : null
+        }
+        next={safeRedirectPath(next)}
+      />
+      <DeleteAccountCard />
+    </>
   )
 }
 

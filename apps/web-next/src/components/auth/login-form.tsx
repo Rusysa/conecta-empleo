@@ -48,7 +48,12 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="password">Contraseña</FieldLabel>
+              <div className="flex items-center justify-between gap-2">
+                <FieldLabel htmlFor="password">Contraseña</FieldLabel>
+                <Link href="/recuperar" className="text-sm text-muted-foreground underline-offset-4 hover:underline">
+                  ¿Olvidaste tu contraseña?
+                </Link>
+              </div>
               <Input
                 {...field}
                 id="password"

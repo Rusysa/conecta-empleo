@@ -9,14 +9,30 @@ import { Separator } from "@/components/ui/separator"
 import { ApplyButton } from "@/components/jobs/apply-button"
 import { CompanyLogo } from "@/components/jobs/company-logo"
 import { JobMeta } from "@/components/jobs/job-meta"
+import { APP_URL } from "@/lib/app-url"
 import { formatDate } from "@/lib/format"
+import { buildJobPostingJsonLd, serializeJsonLd } from "@/lib/seo/job-posting"
 import { getPublicJobById } from "@/server/queries/jobs"
+
+function summarize(text: string, max = 155) {
+  const flat = text.replace(/\s+/g, " ").trim()
+  return flat.length > max ? `${flat.slice(0, max - 1).trimEnd()}…` : flat
+}
 
 export async function generateMetadata({
   params,
 }: PageProps<"/vacantes/[id]">): Promise<Metadata> {
   const job = await getPublicJobById((await params).id)
-  return { title: job ? `${job.title} en ${job.company.name}` : "Vacante no encontrada" }
+  if (!job) return { title: "Vacante no encontrada" }
+
+  const title = `${job.title} en ${job.company.name}`
+  const description = summarize(job.description)
+  return {
+    title,
+    description,
+    alternates: { canonical: `/vacantes/${job.id}` },
+    openGraph: { type: "website", title, description, url: `/vacantes/${job.id}` },
+  }
 }
 
 export default async function JobDetailPage({ params }: PageProps<"/vacantes/[id]">) {
@@ -25,6 +41,10 @@ export default async function JobDetailPage({ params }: PageProps<"/vacantes/[id
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(buildJobPostingJsonLd(job, APP_URL)) }}
+      />
       <Button variant="ghost" size="sm" asChild>
         <Link href="/vacantes">
           <ArrowLeft /> Volver a vacantes
