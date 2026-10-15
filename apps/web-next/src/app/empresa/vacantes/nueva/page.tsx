@@ -18,7 +18,11 @@ export default function NewJobPage() {
       <h1 className="text-2xl font-bold tracking-tight">Nueva vacante</h1>
       <Card className="max-w-3xl">
         <CardContent>
-          <Suspense fallback={<div className="h-[36rem] animate-pulse rounded-lg bg-muted" aria-busy="true" />}>
+          <Suspense
+            fallback={
+              <div className="h-[36rem] animate-pulse rounded-lg bg-muted" aria-busy="true" />
+            }
+          >
             <NewJobForm />
           </Suspense>
         </CardContent>

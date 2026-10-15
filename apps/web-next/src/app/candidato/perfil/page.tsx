@@ -9,7 +9,9 @@ import { getCandidateProfile } from "@/server/queries/candidate"
 
 export const metadata: Metadata = { title: "Mi perfil" }
 
-async function ProfileContent({ searchParams }: Pick<PageProps<"/candidato/perfil">, "searchParams">) {
+async function ProfileContent({
+  searchParams,
+}: Pick<PageProps<"/candidato/perfil">, "searchParams">) {
   const session = await requireCandidate("/candidato/perfil")
   const { next } = await searchParams
   const candidate = await getCandidateProfile(session.candidateId, {

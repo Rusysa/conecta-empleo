@@ -6,9 +6,7 @@ import { LoginForm } from "@/components/auth/login-form"
 
 export const metadata: Metadata = { title: "Iniciar sesión" }
 
-async function LoginFormWithParams({
-  searchParams,
-}: Pick<PageProps<"/login">, "searchParams">) {
+async function LoginFormWithParams({ searchParams }: Pick<PageProps<"/login">, "searchParams">) {
   const { callbackUrl } = await searchParams
   return <LoginForm callbackUrl={typeof callbackUrl === "string" ? callbackUrl : undefined} />
 }

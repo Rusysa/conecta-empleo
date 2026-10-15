@@ -7,7 +7,10 @@ export const companyProfileSchema = z.object({
   website: z
     .string()
     .trim()
-    .refine((v) => v === "" || /^https?:\/\/\S+\.\S+$/.test(v), "Ingresa una URL válida (https://…)"),
+    .refine(
+      (v) => v === "" || /^https?:\/\/\S+\.\S+$/.test(v),
+      "Ingresa una URL válida (https://…)"
+    ),
 })
 
 export type CompanyProfileInput = z.infer<typeof companyProfileSchema>

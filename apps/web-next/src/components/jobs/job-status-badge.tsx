@@ -11,7 +11,10 @@ const VARIANTS = {
 
 export function JobStatusBadge({ status }: { status: JobStatus }) {
   return (
-    <Badge variant={VARIANTS[status]} className={status === "CLOSED" ? "text-muted-foreground" : undefined}>
+    <Badge
+      variant={VARIANTS[status]}
+      className={status === "CLOSED" ? "text-muted-foreground" : undefined}
+    >
       {JOB_STATUS_LABELS[status]}
     </Badge>
   )

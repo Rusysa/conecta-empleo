@@ -52,7 +52,13 @@ export function ForgotPasswordForm() {
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="email">Correo electrónico</FieldLabel>
-              <Input {...field} id="email" type="email" autoComplete="email" aria-invalid={fieldState.invalid} />
+              <Input
+                {...field}
+                id="email"
+                type="email"
+                autoComplete="email"
+                aria-invalid={fieldState.invalid}
+              />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -62,7 +68,10 @@ export function ForgotPasswordForm() {
           Enviar enlace
         </Button>
         <p className="text-center text-sm text-muted-foreground">
-          <Link href="/login" className="font-medium text-foreground underline-offset-4 hover:underline">
+          <Link
+            href="/login"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
             Volver a iniciar sesión
           </Link>
         </p>

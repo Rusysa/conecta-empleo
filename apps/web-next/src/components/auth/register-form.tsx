@@ -86,7 +86,13 @@ export function RegisterForm({ defaultRole }: { defaultRole: RegisterInput["role
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="email">Correo electrónico</FieldLabel>
-              <Input {...field} id="email" type="email" autoComplete="email" aria-invalid={fieldState.invalid} />
+              <Input
+                {...field}
+                id="email"
+                type="email"
+                autoComplete="email"
+                aria-invalid={fieldState.invalid}
+              />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -140,7 +146,11 @@ export function RegisterForm({ defaultRole }: { defaultRole: RegisterInput["role
                 <FieldLabel htmlFor="acceptPrivacy" className="font-normal">
                   <span>
                     Acepto el{" "}
-                    <Link href="/privacidad" target="_blank" className="underline underline-offset-4">
+                    <Link
+                      href="/privacidad"
+                      target="_blank"
+                      className="underline underline-offset-4"
+                    >
                       aviso de privacidad
                     </Link>
                   </span>
@@ -157,7 +167,10 @@ export function RegisterForm({ defaultRole }: { defaultRole: RegisterInput["role
         </Button>
         <p className="text-center text-sm text-muted-foreground">
           ¿Ya tienes cuenta?{" "}
-          <Link href="/login" className="font-medium text-foreground underline-offset-4 hover:underline">
+          <Link
+            href="/login"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
             Inicia sesión
           </Link>
         </p>

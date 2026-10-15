@@ -16,11 +16,7 @@ export function formatRelativeDate(date: Date, now = new Date()) {
   return formatDate(date)
 }
 
-export function formatSalary(
-  min: number | null,
-  max: number | null,
-  currency = "MXN"
-) {
+export function formatSalary(min: number | null, max: number | null, currency = "MXN") {
   if (min == null && max == null) return null
   const fmt = new Intl.NumberFormat("es-MX", {
     style: "currency",

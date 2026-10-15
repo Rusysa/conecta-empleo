@@ -11,9 +11,7 @@ const AREA_ROLES: { prefix: string; roles: string[] }[] = [
 
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl
-  const area = AREA_ROLES.find(
-    (a) => pathname === a.prefix || pathname.startsWith(`${a.prefix}/`)
-  )
+  const area = AREA_ROLES.find((a) => pathname === a.prefix || pathname.startsWith(`${a.prefix}/`))
   if (!area) return NextResponse.next()
 
   const role = request.cookies.get("mock_role")?.value ?? "GUEST"

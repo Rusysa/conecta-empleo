@@ -22,7 +22,11 @@ describe("registerSchema", () => {
   })
 
   it("requires at least 8 characters", () => {
-    const r = registerSchema.safeParse({ ...valid, password: "1234567", confirmPassword: "1234567" })
+    const r = registerSchema.safeParse({
+      ...valid,
+      password: "1234567",
+      confirmPassword: "1234567",
+    })
     expect(r.success).toBe(false)
   })
 
@@ -39,7 +43,9 @@ describe("registerSchema", () => {
 
 describe("resetPasswordSchema", () => {
   it("rejects mismatched passwords", () => {
-    expect(resetPasswordSchema.safeParse({ password: "abcdefgh", confirmPassword: "abcdefgx" }).success).toBe(false)
+    expect(
+      resetPasswordSchema.safeParse({ password: "abcdefgh", confirmPassword: "abcdefgx" }).success
+    ).toBe(false)
   })
 })
 
@@ -68,7 +74,9 @@ describe("validateCvFile", () => {
   it("rejects other types and mismatched MIME/extension", () => {
     expect(validateCvFile({ name: "cv.txt", type: "text/plain", size: 10 })).toMatch(/PDF o DOCX/)
     expect(validateCvFile({ name: "cv.pdf", type: "image/png", size: 10 })).toMatch(/PDF o DOCX/)
-    expect(validateCvFile({ name: "cv.doc", type: "application/msword", size: 10 })).toMatch(/PDF o DOCX/)
+    expect(validateCvFile({ name: "cv.doc", type: "application/msword", size: 10 })).toMatch(
+      /PDF o DOCX/
+    )
   })
 
   it("rejects files over 5 MB and empty files", () => {
@@ -83,8 +91,12 @@ describe("companyProfileSchema", () => {
 
   it("allows an empty website but validates non-empty ones", () => {
     expect(companyProfileSchema.safeParse(valid).success).toBe(true)
-    expect(companyProfileSchema.safeParse({ ...valid, website: "https://cafe.mx" }).success).toBe(true)
-    expect(companyProfileSchema.safeParse({ ...valid, website: "javascript:alert(1)" }).success).toBe(false)
+    expect(companyProfileSchema.safeParse({ ...valid, website: "https://cafe.mx" }).success).toBe(
+      true
+    )
+    expect(
+      companyProfileSchema.safeParse({ ...valid, website: "javascript:alert(1)" }).success
+    ).toBe(false)
   })
 })
 

@@ -55,7 +55,11 @@ export function JobForm({ mode, defaultValues, jobId, status }: Props) {
     return form.handleSubmit(async (values) => {
       // TODO(backend): createJob(values, nextStatus) / updateJob(jobId, values) Server Actions.
       await new Promise((r) => setTimeout(r, 700))
-      console.info(mode === "create" ? "createJob (mock)" : "updateJob (mock)", { jobId, nextStatus, values })
+      console.info(mode === "create" ? "createJob (mock)" : "updateJob (mock)", {
+        jobId,
+        nextStatus,
+        values,
+      })
       toast.success(
         mode === "edit"
           ? "Cambios guardados"
@@ -76,7 +80,12 @@ export function JobForm({ mode, defaultValues, jobId, status }: Props) {
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="title">Título de la vacante</FieldLabel>
-              <Input {...field} id="title" placeholder="Ej. Desarrollador Frontend" aria-invalid={fieldState.invalid} />
+              <Input
+                {...field}
+                id="title"
+                placeholder="Ej. Desarrollador Frontend"
+                aria-invalid={fieldState.invalid}
+              />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -90,7 +99,12 @@ export function JobForm({ mode, defaultValues, jobId, status }: Props) {
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="workMode">Modalidad</FieldLabel>
                 <Select name={field.name} value={field.value ?? ""} onValueChange={field.onChange}>
-                  <SelectTrigger id="workMode" className="w-full" aria-invalid={fieldState.invalid} onBlur={field.onBlur}>
+                  <SelectTrigger
+                    id="workMode"
+                    className="w-full"
+                    aria-invalid={fieldState.invalid}
+                    onBlur={field.onBlur}
+                  >
                     <SelectValue placeholder="Elige una modalidad" />
                   </SelectTrigger>
                   <SelectContent>
@@ -140,7 +154,12 @@ export function JobForm({ mode, defaultValues, jobId, status }: Props) {
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="location">Ubicación</FieldLabel>
-              <Input {...field} id="location" placeholder="Ej. Monterrey, N.L." aria-invalid={fieldState.invalid} />
+              <Input
+                {...field}
+                id="location"
+                placeholder="Ej. Monterrey, N.L."
+                aria-invalid={fieldState.invalid}
+              />
               <FieldDescription>Opcional si la vacante es remota.</FieldDescription>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
@@ -157,7 +176,9 @@ export function JobForm({ mode, defaultValues, jobId, status }: Props) {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={name}>{name === "salaryMin" ? "Mínimo" : "Máximo"}</FieldLabel>
+                    <FieldLabel htmlFor={name}>
+                      {name === "salaryMin" ? "Mínimo" : "Máximo"}
+                    </FieldLabel>
                     <Input
                       {...field}
                       id={name}
@@ -187,7 +208,8 @@ export function JobForm({ mode, defaultValues, jobId, status }: Props) {
                 aria-invalid={fieldState.invalid}
               />
               <FieldDescription>
-                Puedes usar formato: **negritas**, listas con guion y una línea en blanco entre párrafos.
+                Puedes usar formato: **negritas**, listas con guion y una línea en blanco entre
+                párrafos.
               </FieldDescription>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
@@ -219,7 +241,12 @@ export function JobForm({ mode, defaultValues, jobId, status }: Props) {
                 {isSubmitting && <Loader2 className="animate-spin" />}
                 Publicar
               </Button>
-              <Button type="button" variant="outline" disabled={isSubmitting} onClick={submitAs("DRAFT")}>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={isSubmitting}
+                onClick={submitAs("DRAFT")}
+              >
                 Guardar borrador
               </Button>
             </>

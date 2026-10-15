@@ -16,10 +16,7 @@ function byPublishedDesc(a: JobWithCompany, b: JobWithCompany) {
 }
 
 function normalize(text: string) {
-  return text
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
+  return text.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 }
 
 export type JobSearchParams = {
@@ -29,12 +26,7 @@ export type JobSearchParams = {
   page?: number
 }
 
-export async function getActiveJobs({
-  q,
-  city,
-  workMode,
-  page = 1,
-}: JobSearchParams) {
+export async function getActiveJobs({ q, city, workMode, page = 1 }: JobSearchParams) {
   await connection()
   let items = jobs
     .filter((j) => j.status === "ACTIVE")

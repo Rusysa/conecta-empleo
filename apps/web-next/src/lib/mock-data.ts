@@ -22,8 +22,7 @@ export const companies: Company[] = [
     id: "cmp_2",
     name: "Café La Esquina",
     slug: "cafe-la-esquina",
-    description:
-      "Cadena de cafeterías de especialidad con 12 sucursales en Guadalajara y CDMX.",
+    description: "Cadena de cafeterías de especialidad con 12 sucursales en Guadalajara y CDMX.",
     logoUrl: null,
     website: null,
     location: "Guadalajara, Jal.",
@@ -62,8 +61,7 @@ export const jobs: Job[] = [
     companyId: "cmp_1",
     title: "Desarrollador Backend (Node.js)",
     slug: "desarrollador-backend-node",
-    description:
-      "Diseña y mantén servicios que procesan miles de envíos al día.",
+    description: "Diseña y mantén servicios que procesan miles de envíos al día.",
     requirements:
       "- 3+ años con Node.js\n- PostgreSQL\n- Docker\n- Deseable: experiencia con colas de mensajes",
     location: null,

@@ -58,9 +58,7 @@ export function ApplyDialog({ jobTitle, companyName, candidate }: Props) {
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
           <DialogHeader>
             <DialogTitle>Aplicar a {jobTitle}</DialogTitle>
-            <DialogDescription>
-              {companyName} recibirá los siguientes datos:
-            </DialogDescription>
+            <DialogDescription>{companyName} recibirá los siguientes datos:</DialogDescription>
           </DialogHeader>
 
           <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 rounded-lg bg-muted p-3 text-sm">

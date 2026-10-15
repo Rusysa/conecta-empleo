@@ -5,24 +5,12 @@ import Link from "next/link"
 import { Menu } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Separator } from "@/components/ui/separator"
 import type { NavLink } from "@/components/layout/nav-links"
 import { useMockLogout } from "@/components/layout/use-mock-logout"
 
-export function MobileNav({
-  links,
-  email,
-}: {
-  links: NavLink[]
-  email: string | null
-}) {
+export function MobileNav({ links, email }: { links: NavLink[]; email: string | null }) {
   const [open, setOpen] = useState(false)
   const logout = useMockLogout()
   const close = () => setOpen(false)
@@ -64,10 +52,14 @@ export function MobileNav({
           ) : (
             <>
               <Button variant="outline" asChild>
-                <Link href="/login" onClick={close}>Iniciar sesión</Link>
+                <Link href="/login" onClick={close}>
+                  Iniciar sesión
+                </Link>
               </Button>
               <Button asChild>
-                <Link href="/registro" onClick={close}>Crear cuenta</Link>
+                <Link href="/registro" onClick={close}>
+                  Crear cuenta
+                </Link>
               </Button>
             </>
           )}

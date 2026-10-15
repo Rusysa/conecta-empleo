@@ -13,7 +13,7 @@ describe("escapeCsvCell", () => {
   })
 
   it("neutralizes spreadsheet formulas (CSV injection)", () => {
-    expect(escapeCsvCell("=HYPERLINK(\"http://x\")")).toBe("\"'=HYPERLINK(\"\"http://x\"\")\"")
+    expect(escapeCsvCell('=HYPERLINK("http://x")')).toBe('"\'=HYPERLINK(""http://x"")"')
     expect(escapeCsvCell("+52 81 1234")).toBe("'+52 81 1234")
     expect(escapeCsvCell("@SUM(A1)")).toBe("'@SUM(A1)")
     expect(escapeCsvCell("-1")).toBe("'-1")
@@ -46,7 +46,9 @@ describe("safeRedirectPath", () => {
 
 describe("job search params", () => {
   it("parses Spanish slugs into filters", () => {
-    expect(parseJobSearchParams({ q: " react ", ciudad: "Monterrey", modalidad: "remoto", page: "2" })).toEqual({
+    expect(
+      parseJobSearchParams({ q: " react ", ciudad: "Monterrey", modalidad: "remoto", page: "2" })
+    ).toEqual({
       q: "react",
       city: "Monterrey",
       modalidad: "remoto",
@@ -63,7 +65,9 @@ describe("job search params", () => {
   })
 
   it("round-trips through buildJobsHref and omits page 1", () => {
-    expect(buildJobsHref({ q: "café", modalidad: "hibrido", page: 1 })).toBe("/vacantes?q=caf%C3%A9&modalidad=hibrido")
+    expect(buildJobsHref({ q: "café", modalidad: "hibrido", page: 1 })).toBe(
+      "/vacantes?q=caf%C3%A9&modalidad=hibrido"
+    )
     expect(buildJobsHref({})).toBe("/vacantes")
   })
 })

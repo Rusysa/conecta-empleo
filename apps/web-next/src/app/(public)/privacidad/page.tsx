@@ -14,8 +14,8 @@ export default function PrivacyPage() {
       <section className="space-y-2">
         <h2>Datos que recabamos</h2>
         <p>
-          Nombre, correo electrónico, teléfono, ciudad y CV de los candidatos; y datos de
-          contacto de las empresas que publican vacantes.
+          Nombre, correo electrónico, teléfono, ciudad y CV de los candidatos; y datos de contacto
+          de las empresas que publican vacantes.
         </p>
       </section>
       <section className="space-y-2">

@@ -29,9 +29,17 @@ async function Dashboard() {
   return (
     <>
       <div className="grid gap-3 sm:grid-cols-3">
-        <StatTile label="Vacantes activas" value={data.activeJobs} hint={`de ${data.totalJobs} en total`} />
+        <StatTile
+          label="Vacantes activas"
+          value={data.activeJobs}
+          hint={`de ${data.totalJobs} en total`}
+        />
         <StatTile label="Postulantes" value={data.totalApplicants} hint="en todas tus vacantes" />
-        <StatTile label="Postulaciones sin revisar" value={data.newApplicants} hint="con estado Enviada" />
+        <StatTile
+          label="Postulaciones sin revisar"
+          value={data.newApplicants}
+          hint="con estado Enviada"
+        />
       </div>
 
       <Card>
@@ -50,7 +58,10 @@ async function Dashboard() {
                   <div className="min-w-0 flex-1">
                     <p className="font-medium">{app.fullName}</p>
                     <p className="text-sm text-muted-foreground">
-                      <Link href={`/empresa/vacantes/${app.jobId}/postulantes`} className="hover:underline">
+                      <Link
+                        href={`/empresa/vacantes/${app.jobId}/postulantes`}
+                        className="hover:underline"
+                      >
                         {app.jobTitle}
                       </Link>{" "}
                       · {formatRelativeDate(app.createdAt)}

@@ -20,9 +20,7 @@ function summarize(text: string, max = 155) {
   return flat.length > max ? `${flat.slice(0, max - 1).trimEnd()}…` : flat
 }
 
-export async function generateMetadata({
-  params,
-}: PageProps<"/vacantes/[id]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/vacantes/[id]">): Promise<Metadata> {
   const job = await getPublicJobById((await params).id)
   if (!job) return { title: "Vacante no encontrada" }
 

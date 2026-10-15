@@ -21,7 +21,10 @@ export function ResetPasswordForm({ token }: { token: string }) {
   async function onSubmit(values: ResetPasswordInput) {
     // TODO(backend): resetPassword(token, password) → validates and consumes the token.
     await new Promise((r) => setTimeout(r, 700))
-    console.info("resetPassword (mock)", { tokenLength: token.length, length: values.password.length })
+    console.info("resetPassword (mock)", {
+      tokenLength: token.length,
+      length: values.password.length,
+    })
     toast.success("Contraseña actualizada", { description: "Ya puedes iniciar sesión." })
     router.push("/login")
   }

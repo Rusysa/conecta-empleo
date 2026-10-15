@@ -35,7 +35,9 @@ async function ApplicantsContent({
   )
 }
 
-export default function JobApplicantsPage({ params }: PageProps<"/empresa/vacantes/[id]/postulantes">) {
+export default function JobApplicantsPage({
+  params,
+}: PageProps<"/empresa/vacantes/[id]/postulantes">) {
   return (
     <>
       <Button variant="ghost" size="sm" className="self-start" asChild>

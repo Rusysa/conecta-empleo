@@ -51,7 +51,9 @@ export default async function CompanyPage({ params }: PageProps<"/empresas/[slug
         </div>
       </header>
 
-      {company.description && <p className="max-w-3xl text-muted-foreground">{company.description}</p>}
+      {company.description && (
+        <p className="max-w-3xl text-muted-foreground">{company.description}</p>
+      )}
 
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">Vacantes abiertas ({jobs.length})</h2>
@@ -62,7 +64,9 @@ export default async function CompanyPage({ params }: PageProps<"/empresas/[slug
             ))}
           </div>
         ) : (
-          <p className="text-muted-foreground">Esta empresa no tiene vacantes abiertas por ahora.</p>
+          <p className="text-muted-foreground">
+            Esta empresa no tiene vacantes abiertas por ahora.
+          </p>
         )}
       </section>
     </div>

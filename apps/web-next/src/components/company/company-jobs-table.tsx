@@ -2,7 +2,16 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { CirclePause, CirclePlay, CircleX, Eye, MoreHorizontal, Pencil, Send, Users } from "lucide-react"
+import {
+  CirclePause,
+  CirclePlay,
+  CircleX,
+  Eye,
+  MoreHorizontal,
+  Pencil,
+  Send,
+  Users,
+} from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
@@ -52,7 +61,11 @@ export function CompanyJobsTable({ jobs: initialJobs }: { jobs: CompanyJobRow[] 
     setJobs((prev) =>
       prev.map((j) =>
         j.id === jobId
-          ? { ...j, status, publishedAt: status === "ACTIVE" && !j.publishedAt ? new Date() : j.publishedAt }
+          ? {
+              ...j,
+              status,
+              publishedAt: status === "ACTIVE" && !j.publishedAt ? new Date() : j.publishedAt,
+            }
           : j
       )
     )
@@ -78,7 +91,10 @@ export function CompanyJobsTable({ jobs: initialJobs }: { jobs: CompanyJobRow[] 
             {jobs.map((job) => (
               <TableRow key={job.id}>
                 <TableCell className="max-w-72 font-medium whitespace-normal">
-                  <Link href={`/empresa/vacantes/${job.id}/postulantes`} className="hover:underline">
+                  <Link
+                    href={`/empresa/vacantes/${job.id}/postulantes`}
+                    className="hover:underline"
+                  >
                     {job.title}
                   </Link>
                 </TableCell>
@@ -99,7 +115,11 @@ export function CompanyJobsTable({ jobs: initialJobs }: { jobs: CompanyJobRow[] 
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon-sm" aria-label={`Acciones para ${job.title}`}>
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        aria-label={`Acciones para ${job.title}`}
+                      >
                         <MoreHorizontal />
                       </Button>
                     </DropdownMenuTrigger>

@@ -20,7 +20,11 @@ test("registering as a candidate leads to profile onboarding", async ({ page }) 
   await expect(page.getByText("Completa tu perfil para poder aplicar")).toBeVisible()
 })
 
-test("a candidate completes the profile, then applies to a job", async ({ page, context, baseURL }) => {
+test("a candidate completes the profile, then applies to a job", async ({
+  page,
+  context,
+  baseURL,
+}) => {
   await loginAs(context, "CANDIDATE_INCOMPLETE", baseURL!)
   await page.goto("/vacantes/job_1")
   await page.getByRole("link", { name: "Completa tu perfil para aplicar" }).click()
@@ -35,7 +39,11 @@ test("a candidate completes the profile, then applies to a job", async ({ page, 
   await expect(page.getByText("Datos guardados")).toBeVisible()
 
   const cvInput = page.getByLabel("Archivo del CV")
-  await cvInput.setInputFiles({ name: "notas.txt", mimeType: "text/plain", buffer: Buffer.from("x") })
+  await cvInput.setInputFiles({
+    name: "notas.txt",
+    mimeType: "text/plain",
+    buffer: Buffer.from("x"),
+  })
   await expect(page.getByText("Solo se aceptan archivos PDF o DOCX")).toBeVisible()
   await cvInput.setInputFiles(SAMPLE_PDF)
   await page.getByRole("button", { name: "Subir CV" }).click()
@@ -52,7 +60,11 @@ test("a candidate completes the profile, then applies to a job", async ({ page, 
   await expect(page.getByText("¡Postulación enviada!")).toBeVisible()
 })
 
-test("a candidate cannot apply twice and sees application statuses", async ({ page, context, baseURL }) => {
+test("a candidate cannot apply twice and sees application statuses", async ({
+  page,
+  context,
+  baseURL,
+}) => {
   await loginAs(context, "CANDIDATE", baseURL!)
   await page.goto("/vacantes/job_2")
   await expect(page.getByRole("button", { name: "Ya aplicaste" })).toBeDisabled()

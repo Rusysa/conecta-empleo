@@ -33,7 +33,9 @@ export default function ResetPasswordPage({ searchParams }: PageProps<"/recupera
           <CardDescription>Elige una contraseña que no uses en otros sitios.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Suspense fallback={<div className="h-56 animate-pulse rounded-lg bg-muted" aria-busy="true" />}>
+          <Suspense
+            fallback={<div className="h-56 animate-pulse rounded-lg bg-muted" aria-busy="true" />}
+          >
             <ResetContent searchParams={searchParams} />
           </Suspense>
         </CardContent>

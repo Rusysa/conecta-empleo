@@ -5,12 +5,7 @@ export type Role = "CANDIDATE" | "COMPANY" | "ADMIN"
 export type JobStatus = "DRAFT" | "ACTIVE" | "PAUSED" | "CLOSED"
 export type WorkMode = "ONSITE" | "REMOTE" | "HYBRID"
 export type EmploymentType = "FULL_TIME" | "PART_TIME" | "CONTRACT" | "INTERNSHIP"
-export type ApplicationStatus =
-  | "SUBMITTED"
-  | "VIEWED"
-  | "IN_PROCESS"
-  | "REJECTED"
-  | "HIRED"
+export type ApplicationStatus = "SUBMITTED" | "VIEWED" | "IN_PROCESS" | "REJECTED" | "HIRED"
 
 export type Company = {
   id: string

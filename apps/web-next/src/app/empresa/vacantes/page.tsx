@@ -39,7 +39,9 @@ export default function CompanyJobsPage() {
           </Link>
         </Button>
       </div>
-      <Suspense fallback={<div className="h-80 animate-pulse rounded-xl bg-muted" aria-busy="true" />}>
+      <Suspense
+        fallback={<div className="h-80 animate-pulse rounded-xl bg-muted" aria-busy="true" />}
+      >
         <JobsContent />
       </Suspense>
     </>

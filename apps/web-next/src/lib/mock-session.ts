@@ -45,7 +45,5 @@ export async function getMockSession(): Promise<MockSession> {
 }
 
 export async function hasCandidateApplied(candidateId: string, jobId: string) {
-  return applications.some(
-    (a) => a.candidateId === candidateId && a.jobId === jobId
-  )
+  return applications.some((a) => a.candidateId === candidateId && a.jobId === jobId)
 }

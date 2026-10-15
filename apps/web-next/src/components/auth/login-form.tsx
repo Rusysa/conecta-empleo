@@ -38,7 +38,13 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="email">Correo electrónico</FieldLabel>
-              <Input {...field} id="email" type="email" autoComplete="email" aria-invalid={fieldState.invalid} />
+              <Input
+                {...field}
+                id="email"
+                type="email"
+                autoComplete="email"
+                aria-invalid={fieldState.invalid}
+              />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -50,7 +56,10 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
             <Field data-invalid={fieldState.invalid}>
               <div className="flex items-center justify-between gap-2">
                 <FieldLabel htmlFor="password">Contraseña</FieldLabel>
-                <Link href="/recuperar" className="text-sm text-muted-foreground underline-offset-4 hover:underline">
+                <Link
+                  href="/recuperar"
+                  className="text-sm text-muted-foreground underline-offset-4 hover:underline"
+                >
                   ¿Olvidaste tu contraseña?
                 </Link>
               </div>
@@ -71,7 +80,10 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
         </Button>
         <p className="text-center text-sm text-muted-foreground">
           ¿No tienes cuenta?{" "}
-          <Link href="/registro" className="font-medium text-foreground underline-offset-4 hover:underline">
+          <Link
+            href="/registro"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
             Regístrate
           </Link>
         </p>
