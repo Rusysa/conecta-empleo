@@ -1,7 +1,7 @@
 # Seguridad
 
-La base inicial no implementa registro ni sesiones y no debe usarse aún para procesar datos personales. Las rutas pendientes responden 501.
+Registro, sesiones y perfil ya están implementados; las APIs de vacantes/postulaciones siguen pendientes (`501`). Ver [configuración y límites actuales](docs/SUPABASE.md) antes de un despliegue público.
 
-Al implementar: Argon2id, sesiones persistentes, regeneración al autenticar, cookies HttpOnly/Secure, CSRF, límites de intentos, consultas parametrizadas, permisos por rol y propiedad, validación de entradas y enlaces HTTPS. No descargar URLs de CV desde el servidor ni renderizar HTML arbitrario.
+Implementado: Argon2id, JWT firmado con JWS HS256 y revocación en PostgreSQL, rotación al autenticar, cookies HttpOnly/Secure, CSRF firmado ligado al navegador/sesión, límite de intentos, consultas parametrizadas, perfil propio y enlaces HTTPS. No se usa OAuth. No descargar URLs de CV desde el servidor ni renderizar HTML arbitrario. Antes de producción faltan verificación/recuperación de correo, aviso de privacidad definitivo, rol SQL de privilegios mínimos y política de operación y backups.
 
 No publicar vulnerabilidades con secretos o datos personales en issues. Contactar al propietario del repositorio por un canal privado acordado. Si se publica el repositorio, configurar un canal de reporte privado antes del lanzamiento.

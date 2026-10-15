@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/sheet"
 import { Separator } from "@/components/ui/separator"
 import type { NavLink } from "@/components/layout/nav-links"
-import { useMockLogout } from "@/components/layout/use-mock-logout"
+import { useLogout } from "@/components/layout/use-logout"
 
 export function MobileNav({
   links,
@@ -24,7 +24,7 @@ export function MobileNav({
   email: string | null
 }) {
   const [open, setOpen] = useState(false)
-  const logout = useMockLogout()
+  const logout = useLogout()
   const close = () => setOpen(false)
 
   return (

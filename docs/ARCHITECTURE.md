@@ -59,4 +59,4 @@ Cada `src/features/<dominio>/` contiene sus componentes, hooks, adaptadores HTTP
 - [Express: sesiones y cookies](https://expressjs.com/en/resources/middleware/session.html)
 - [pnpm workspaces](https://pnpm.io/workspaces)
 
-Estas referencias orientan las implementaciones pendientes. El starter no implementa aún autenticación ni persistencia.
+Auth y perfil ya usan PostgreSQL mediante `pg`; las migraciones se aplican con Supabase CLI. Next.js consume `/api/v1` mediante un proxy del mismo origen y adapta los roles visuales `CANDIDATE`/`COMPANY` a `candidate`/`employer`. No hay una segunda base de usuarios en Prisma, Auth.js ni Supabase Auth. Los JWT firmados mediante JWS viven en cookies HttpOnly y las sesiones revocables en PostgreSQL. La propuesta histórica de `apps/web-next/CLAUDE.md` no sustituye estos contratos; los módulos de vacantes y postulaciones siguen pendientes.

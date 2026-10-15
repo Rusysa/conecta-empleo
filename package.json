@@ -5,16 +5,24 @@
   "description": "Tablero de empleo con registro, vacantes y seguimiento de postulaciones.",
   "type": "module",
   "packageManager": "pnpm@10.34.7",
-  "engines": { "node": ">=24.14.0 <25" },
+  "engines": {
+    "node": ">=24.14.0 <25"
+  },
   "scripts": {
     "dev:api": "pnpm --filter @conecta/api dev",
     "dev:web": "pnpm --filter @conecta/web dev",
     "build": "pnpm --filter @conecta/web build",
-    "test": "pnpm --filter @conecta/api test",
+    "test": "pnpm --filter @conecta/api test && pnpm --filter @conecta/web-next test",
     "start:api": "pnpm --filter @conecta/api start",
     "dev:web-next": "pnpm --filter @conecta/web-next dev",
-    "build:web-next": "pnpm --filter @conecta/web-next build"
+    "build:web-next": "pnpm --filter @conecta/web-next build",
+    "db:sync": "node scripts/sync-migrations.mjs",
+    "db:check": "node scripts/sync-migrations.mjs --check",
+    "db:push": "pnpm db:check && supabase db push",
+    "db:start": "supabase start",
+    "db:cleanup": "pnpm --filter @conecta/api db:cleanup"
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "supabase": "^2.121.0"
+  }
 }
