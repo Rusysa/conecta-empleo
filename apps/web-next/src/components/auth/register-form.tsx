@@ -44,27 +44,42 @@ export function RegisterForm({ defaultRole }: { defaultRole: RegisterInput["role
   async function onSubmit(values: RegisterInput) {
     try {
       await mutate("/auth/register", {
-        name: values.name, email: values.email, password: values.password,
-        role: values.role === "CANDIDATE" ? "candidate" : "employer", acceptPrivacy: values.acceptPrivacy,
+        name: values.name,
+        email: values.email,
+        password: values.password,
+        role: values.role === "CANDIDATE" ? "candidate" : "employer",
+        acceptPrivacy: values.acceptPrivacy,
       })
       router.push(values.role === "CANDIDATE" ? "/candidato/perfil" : "/empresa/perfil")
       router.refresh()
     } catch (error) {
-      form.setError("root", { message: error instanceof Error ? error.message : "No se pudo crear la cuenta." })
+      form.setError("root", {
+        message: error instanceof Error ? error.message : "No se pudo crear la cuenta.",
+      })
     }
   }
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
       <FieldGroup>
-        {form.formState.errors.root && <p role="alert" className="text-sm text-destructive">{form.formState.errors.root.message}</p>}
+        {form.formState.errors.root && (
+          <p role="alert" className="text-sm text-destructive">
+            {form.formState.errors.root.message}
+          </p>
+        )}
         <Controller
           name="name"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="name">Tu nombre o nombre de la empresa</FieldLabel>
-              <Input {...field} id="name" autoComplete="name" maxLength={100} aria-invalid={fieldState.invalid} />
+              <Input
+                {...field}
+                id="name"
+                autoComplete="name"
+                maxLength={100}
+                aria-invalid={fieldState.invalid}
+              />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -88,7 +103,7 @@ export function RegisterForm({ defaultRole }: { defaultRole: RegisterInput["role
                         <Icon className="size-4" aria-hidden />
                         {label}
                       </FieldContent>
-                      <RadioGroupItem value={value} id={`role-${value}`} />
+                      <RadioGroupItem value={value} id={`role-${value}`} aria-label={label} />
                     </Field>
                   </FieldLabel>
                 ))}
@@ -103,7 +118,13 @@ export function RegisterForm({ defaultRole }: { defaultRole: RegisterInput["role
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="email">Correo electrónico</FieldLabel>
-              <Input {...field} id="email" type="email" autoComplete="email" aria-invalid={fieldState.invalid} />
+              <Input
+                {...field}
+                id="email"
+                type="email"
+                autoComplete="email"
+                aria-invalid={fieldState.invalid}
+              />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -157,7 +178,11 @@ export function RegisterForm({ defaultRole }: { defaultRole: RegisterInput["role
                 <FieldLabel htmlFor="acceptPrivacy" className="font-normal">
                   <span>
                     Acepto el{" "}
-                    <Link href="/privacidad" target="_blank" className="underline underline-offset-4">
+                    <Link
+                      href="/privacidad"
+                      target="_blank"
+                      className="underline underline-offset-4"
+                    >
                       aviso de privacidad
                     </Link>
                   </span>
@@ -174,7 +199,10 @@ export function RegisterForm({ defaultRole }: { defaultRole: RegisterInput["role
         </Button>
         <p className="text-center text-sm text-muted-foreground">
           ¿Ya tienes cuenta?{" "}
-          <Link href="/login" className="font-medium text-foreground underline-offset-4 hover:underline">
+          <Link
+            href="/login"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
             Inicia sesión
           </Link>
         </p>

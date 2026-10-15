@@ -22,15 +22,33 @@ export function JobFilters({ q, city, modalidad }: Props) {
       <div className="grid gap-1.5">
         <Label htmlFor="q">Puesto o palabra clave</Label>
         <div className="relative">
-          <Search className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
-          <Input id="q" name="q" defaultValue={q} placeholder="Ej. Frontend, barista…" className="pl-8" />
+          <Search
+            className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground"
+            aria-hidden
+          />
+          <Input
+            id="q"
+            name="q"
+            defaultValue={q}
+            placeholder="Ej. Frontend, barista…"
+            className="pl-8"
+          />
         </div>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="ciudad">Ciudad</Label>
         <div className="relative">
-          <MapPin className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
-          <Input id="ciudad" name="ciudad" defaultValue={city} placeholder="Ej. Monterrey" className="pl-8" />
+          <MapPin
+            className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground"
+            aria-hidden
+          />
+          <Input
+            id="ciudad"
+            name="ciudad"
+            defaultValue={city}
+            placeholder="Ej. Monterrey"
+            className="pl-8"
+          />
         </div>
       </div>
       <div className="grid gap-1.5">

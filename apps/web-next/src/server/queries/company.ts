@@ -64,5 +64,9 @@ export async function getCompanyDashboard(companyId: string) {
     totalApplicants: companyApps.length,
     newApplicants: companyApps.filter((a) => a.status === "SUBMITTED").length,
     recentApplicants,
+    // Non-closed jobs, most applicants first, for the per-job table.
+    jobs: companyJobs
+      .filter((j) => j.status !== "CLOSED")
+      .sort((a, b) => b.applicantCount - a.applicantCount),
   }
 }

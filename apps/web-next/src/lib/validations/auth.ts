@@ -12,11 +12,12 @@ export const registerSchema = z
     role: z.enum(["CANDIDATE", "COMPANY"]),
     name: z.string().trim().min(2, "Ingresa tu nombre o el de tu empresa").max(100),
     email: z.email("Ingresa un correo válido").max(254),
-    password: z.string().min(12, "La contraseña debe tener al menos 12 caracteres").max(128, "Máximo 128 caracteres"),
+    password: z
+      .string()
+      .min(12, "La contraseña debe tener al menos 12 caracteres")
+      .max(128, "Máximo 128 caracteres"),
     confirmPassword: z.string(),
-    acceptPrivacy: z
-      .boolean()
-      .refine((v) => v, "Debes aceptar el aviso de privacidad"),
+    acceptPrivacy: z.boolean().refine((v) => v, "Debes aceptar el aviso de privacidad"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Las contraseñas no coinciden",

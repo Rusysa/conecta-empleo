@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest"
 
+import { actionErrorMessage } from "@/lib/action-result"
 import { escapeCsvCell, toCsv } from "@/lib/csv"
 import { formatSalary } from "@/lib/format"
+import { describeAlert } from "@/lib/job-alerts"
 import { buildJobsHref, parseJobSearchParams } from "@/lib/job-search-params"
 import { safeRedirectPath } from "@/lib/safe-redirect"
 
@@ -13,7 +15,7 @@ describe("escapeCsvCell", () => {
   })
 
   it("neutralizes spreadsheet formulas (CSV injection)", () => {
-    expect(escapeCsvCell("=HYPERLINK(\"http://x\")")).toBe("\"'=HYPERLINK(\"\"http://x\"\")\"")
+    expect(escapeCsvCell('=HYPERLINK("http://x")')).toBe('"\'=HYPERLINK(""http://x"")"')
     expect(escapeCsvCell("+52 81 1234")).toBe("'+52 81 1234")
     expect(escapeCsvCell("@SUM(A1)")).toBe("'@SUM(A1)")
     expect(escapeCsvCell("-1")).toBe("'-1")
@@ -46,7 +48,9 @@ describe("safeRedirectPath", () => {
 
 describe("job search params", () => {
   it("parses Spanish slugs into filters", () => {
-    expect(parseJobSearchParams({ q: " react ", ciudad: "Monterrey", modalidad: "remoto", page: "2" })).toEqual({
+    expect(
+      parseJobSearchParams({ q: " react ", ciudad: "Monterrey", modalidad: "remoto", page: "2" })
+    ).toEqual({
       q: "react",
       city: "Monterrey",
       modalidad: "remoto",
@@ -63,7 +67,9 @@ describe("job search params", () => {
   })
 
   it("round-trips through buildJobsHref and omits page 1", () => {
-    expect(buildJobsHref({ q: "café", modalidad: "hibrido", page: 1 })).toBe("/vacantes?q=caf%C3%A9&modalidad=hibrido")
+    expect(buildJobsHref({ q: "café", modalidad: "hibrido", page: 1 })).toBe(
+      "/vacantes?q=caf%C3%A9&modalidad=hibrido"
+    )
     expect(buildJobsHref({})).toBe("/vacantes")
   })
 })
@@ -73,5 +79,32 @@ describe("formatSalary", () => {
     expect(formatSalary(9000, 11000)).toMatch(/^\$9,000 – \$11,000$/)
     expect(formatSalary(8000, null)).toMatch(/^Desde \$8,000$/)
     expect(formatSalary(null, null)).toBeNull()
+  })
+})
+
+describe("actionErrorMessage", () => {
+  it("tells the user how long to wait when rate limited", () => {
+    expect(actionErrorMessage({ code: "RATE_LIMITED", retryAfterSeconds: 30 })).toBe(
+      "Demasiados intentos. Intenta de nuevo en 30 segundos."
+    )
+    expect(actionErrorMessage({ code: "RATE_LIMITED", retryAfterSeconds: 90 })).toMatch(
+      /en 2 minutos/
+    )
+    expect(actionErrorMessage({ code: "RATE_LIMITED" })).toMatch(/unos minutos/)
+  })
+
+  it("falls back to a generic message", () => {
+    expect(actionErrorMessage({ code: "UNKNOWN" })).toBe("Algo salió mal. Intenta de nuevo.")
+  })
+})
+
+describe("describeAlert", () => {
+  it("summarizes the saved search", () => {
+    expect(describeAlert({ q: "frontend", city: "Monterrey", workMode: null })).toBe(
+      "“frontend” en Monterrey"
+    )
+    expect(describeAlert({ q: null, city: null, workMode: "REMOTE" })).toBe(
+      "Todas las vacantes · Remoto"
+    )
   })
 })

@@ -1,9 +1,4 @@
-import type {
-  ApplicationStatus,
-  EmploymentType,
-  JobStatus,
-  WorkMode,
-} from "@/lib/types"
+import type { ApplicationStatus, EmploymentType, JobStatus, WorkMode } from "@/lib/types"
 
 export const WORK_MODE_LABELS: Record<WorkMode, string> = {
   ONSITE: "Presencial",

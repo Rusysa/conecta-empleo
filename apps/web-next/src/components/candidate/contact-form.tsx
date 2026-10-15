@@ -6,18 +6,9 @@ import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import {
-  candidateProfileSchema,
-  type CandidateProfileInput,
-} from "@/lib/validations/candidate"
+import { candidateProfileSchema, type CandidateProfileInput } from "@/lib/validations/candidate"
 
 const FIELDS: {
   name: keyof CandidateProfileInput
@@ -36,7 +27,12 @@ const FIELDS: {
     placeholder: "81 1234 5678",
     description: "Solo lo verán las empresas a las que apliques.",
   },
-  { name: "city", label: "Ciudad (opcional)", autoComplete: "address-level2", placeholder: "Monterrey" },
+  {
+    name: "city",
+    label: "Ciudad (opcional)",
+    autoComplete: "address-level2",
+    placeholder: "Monterrey",
+  },
   {
     name: "headline",
     label: "Puesto que buscas (opcional)",

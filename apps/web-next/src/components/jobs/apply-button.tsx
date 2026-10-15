@@ -20,7 +20,7 @@ export async function ApplyButton({ job }: { job: JobWithCompany }) {
     )
   }
 
-  if (session.role === "COMPANY") {
+  if (session.role !== "CANDIDATE") {
     return (
       <p className="flex gap-2 rounded-lg bg-muted p-3 text-sm text-muted-foreground">
         <Info className="mt-0.5 size-4 shrink-0" aria-hidden />
@@ -33,9 +33,7 @@ export async function ApplyButton({ job }: { job: JobWithCompany }) {
     return (
       <div className="space-y-2">
         <Button size="lg" className="w-full" asChild>
-          <Link href="/candidato/perfil">
-            Completa tu perfil para aplicar
-          </Link>
+          <Link href="/candidato/perfil">Completa tu perfil para aplicar</Link>
         </Button>
         <p className="text-center text-xs text-muted-foreground">
           Agrega un enlace HTTPS a tu CV o portafolio.

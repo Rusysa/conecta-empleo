@@ -9,8 +9,16 @@ import { getRecentJobs } from "@/server/queries/jobs"
 
 const STEPS = [
   { icon: Search, title: "Busca", text: "Explora vacantes sin necesidad de registrarte." },
-  { icon: FileText, title: "Sube tu CV", text: "Crea tu perfil una sola vez con tus datos y tu CV." },
-  { icon: Building2, title: "Aplica", text: "La empresa recibe tus datos de contacto al instante." },
+  {
+    icon: FileText,
+    title: "Sube tu CV",
+    text: "Crea tu perfil una sola vez con tus datos y tu CV.",
+  },
+  {
+    icon: Building2,
+    title: "Aplica",
+    text: "La empresa recibe tus datos de contacto al instante.",
+  },
 ]
 
 async function RecentJobs() {

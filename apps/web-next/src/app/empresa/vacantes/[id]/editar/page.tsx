@@ -10,7 +10,9 @@ import { getCompanyJob } from "@/server/queries/company"
 
 export const metadata: Metadata = { title: "Editar vacante" }
 
-async function EditJobContent({ params }: Pick<PageProps<"/empresa/vacantes/[id]/editar">, "params">) {
+async function EditJobContent({
+  params,
+}: Pick<PageProps<"/empresa/vacantes/[id]/editar">, "params">) {
   const { id } = await params
   const session = await requireCompany(`/empresa/vacantes/${id}/editar`)
   // Ownership check: another company's job (or a closed one) is a 404 (CLAUDE.md §14.5).
@@ -48,7 +50,11 @@ async function EditJobContent({ params }: Pick<PageProps<"/empresa/vacantes/[id]
 
 export default function EditJobPage({ params }: PageProps<"/empresa/vacantes/[id]/editar">) {
   return (
-    <Suspense fallback={<div className="h-[40rem] max-w-3xl animate-pulse rounded-xl bg-muted" aria-busy="true" />}>
+    <Suspense
+      fallback={
+        <div className="h-[40rem] max-w-3xl animate-pulse rounded-xl bg-muted" aria-busy="true" />
+      }
+    >
       <EditJobContent params={params} />
     </Suspense>
   )

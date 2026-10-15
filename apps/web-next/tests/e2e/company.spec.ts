@@ -47,7 +47,9 @@ test("a company validates and publishes a new job", async ({ page }) => {
   await page.goto("/empresa/vacantes/nueva")
   await page.getByRole("button", { name: "Publicar" }).click()
   // Errors are role="alert"; "Elige una modalidad" is also the select placeholder.
-  await expect(page.getByRole("alert").filter({ hasText: "Ingresa el título de la vacante" })).toBeVisible()
+  await expect(
+    page.getByRole("alert").filter({ hasText: "Ingresa el título de la vacante" })
+  ).toBeVisible()
   await expect(page.getByRole("alert").filter({ hasText: "Elige una modalidad" })).toBeVisible()
 
   await page.getByLabel("Título de la vacante").fill("Diseñador UX")

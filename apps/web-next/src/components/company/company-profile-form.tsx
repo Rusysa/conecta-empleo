@@ -7,28 +7,20 @@ import { ExternalLink, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { CompanyLogo } from "@/components/jobs/company-logo"
-import {
-  companyProfileSchema,
-  slugify,
-  type CompanyProfileInput,
-} from "@/lib/validations/company"
+import { LogoUpload } from "@/components/company/logo-upload"
+import { companyProfileSchema, slugify, type CompanyProfileInput } from "@/lib/validations/company"
 
 export function CompanyProfileForm({
   defaultValues,
   currentSlug,
+  logoUrl,
 }: {
   defaultValues: CompanyProfileInput
   currentSlug: string | null
+  logoUrl: string | null
 }) {
   const form = useForm<CompanyProfileInput>({
     resolver: zodResolver(companyProfileSchema),
@@ -49,12 +41,7 @@ export function CompanyProfileForm({
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
       <FieldGroup>
-        <div className="flex items-center gap-4">
-          <CompanyLogo company={{ name: name || "?", logoUrl: null }} className="size-16" />
-          <p className="text-sm text-muted-foreground">
-            Por ahora mostramos las iniciales de tu empresa. La subida de logotipo llegará pronto.
-          </p>
-        </div>
+        <LogoUpload name={name} logoUrl={logoUrl} />
 
         <Controller
           name="name"
@@ -62,10 +49,16 @@ export function CompanyProfileForm({
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="name">Nombre de la empresa</FieldLabel>
-              <Input {...field} id="name" autoComplete="organization" aria-invalid={fieldState.invalid} />
+              <Input
+                {...field}
+                id="name"
+                autoComplete="organization"
+                aria-invalid={fieldState.invalid}
+              />
               {slugPreview && (
                 <FieldDescription>
-                  Tu página pública: <span className="font-mono text-xs">/empresas/{slugPreview}</span>
+                  Tu página pública:{" "}
+                  <span className="font-mono text-xs">/empresas/{slugPreview}</span>
                 </FieldDescription>
               )}
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -96,7 +89,12 @@ export function CompanyProfileForm({
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="location">Ubicación (opcional)</FieldLabel>
-                <Input {...field} id="location" placeholder="Ej. Monterrey, N.L." aria-invalid={fieldState.invalid} />
+                <Input
+                  {...field}
+                  id="location"
+                  placeholder="Ej. Monterrey, N.L."
+                  aria-invalid={fieldState.invalid}
+                />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}

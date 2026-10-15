@@ -10,7 +10,9 @@ export default function ForgotPasswordPage() {
     <div className="mx-auto max-w-md px-4 py-12">
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl">Recuperar contraseña</CardTitle>
+          <CardTitle className="text-xl">
+            <h1>Recuperar contraseña</h1>
+          </CardTitle>
           <CardDescription>Te enviaremos un enlace para crear una nueva.</CardDescription>
         </CardHeader>
         <CardContent>

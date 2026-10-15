@@ -2,7 +2,12 @@ import { describe, expect, it } from "vitest"
 
 import { registerSchema, resetPasswordSchema } from "@/lib/validations/auth"
 import { candidateProfileSchema, CV_MAX_BYTES, validateCvFile } from "@/lib/validations/candidate"
-import { companyProfileSchema, slugify } from "@/lib/validations/company"
+import {
+  companyProfileSchema,
+  LOGO_MAX_BYTES,
+  slugify,
+  validateLogoFile,
+} from "@/lib/validations/company"
 import { jobSchema } from "@/lib/validations/job"
 
 const PDF = "application/pdf"
@@ -23,7 +28,11 @@ describe("registerSchema", () => {
   })
 
   it("requires at least 12 characters", () => {
-    const r = registerSchema.safeParse({ ...valid, password: "12345678901", confirmPassword: "12345678901" })
+    const r = registerSchema.safeParse({
+      ...valid,
+      password: "12345678901",
+      confirmPassword: "12345678901",
+    })
     expect(r.success).toBe(false)
   })
 
@@ -40,7 +49,9 @@ describe("registerSchema", () => {
 
 describe("resetPasswordSchema", () => {
   it("rejects mismatched passwords", () => {
-    expect(resetPasswordSchema.safeParse({ password: "abcdefgh", confirmPassword: "abcdefgx" }).success).toBe(false)
+    expect(
+      resetPasswordSchema.safeParse({ password: "abcdefgh", confirmPassword: "abcdefgx" }).success
+    ).toBe(false)
   })
 })
 
@@ -69,7 +80,9 @@ describe("validateCvFile", () => {
   it("rejects other types and mismatched MIME/extension", () => {
     expect(validateCvFile({ name: "cv.txt", type: "text/plain", size: 10 })).toMatch(/PDF o DOCX/)
     expect(validateCvFile({ name: "cv.pdf", type: "image/png", size: 10 })).toMatch(/PDF o DOCX/)
-    expect(validateCvFile({ name: "cv.doc", type: "application/msword", size: 10 })).toMatch(/PDF o DOCX/)
+    expect(validateCvFile({ name: "cv.doc", type: "application/msword", size: 10 })).toMatch(
+      /PDF o DOCX/
+    )
   })
 
   it("rejects files over 5 MB and empty files", () => {
@@ -84,8 +97,12 @@ describe("companyProfileSchema", () => {
 
   it("allows an empty website but validates non-empty ones", () => {
     expect(companyProfileSchema.safeParse(valid).success).toBe(true)
-    expect(companyProfileSchema.safeParse({ ...valid, website: "https://cafe.mx" }).success).toBe(true)
-    expect(companyProfileSchema.safeParse({ ...valid, website: "javascript:alert(1)" }).success).toBe(false)
+    expect(companyProfileSchema.safeParse({ ...valid, website: "https://cafe.mx" }).success).toBe(
+      true
+    )
+    expect(
+      companyProfileSchema.safeParse({ ...valid, website: "javascript:alert(1)" }).success
+    ).toBe(false)
   })
 })
 
@@ -126,5 +143,18 @@ describe("jobSchema", () => {
 
   it("allows empty salaries", () => {
     expect(jobSchema.safeParse({ ...valid, salaryMin: "", salaryMax: "" }).success).toBe(true)
+  })
+})
+
+describe("validateLogoFile", () => {
+  it("accepts PNG/JPG/WebP up to 2 MB", () => {
+    expect(validateLogoFile({ type: "image/png", size: 1000 })).toBeNull()
+    expect(validateLogoFile({ type: "image/webp", size: LOGO_MAX_BYTES })).toBeNull()
+  })
+
+  it("rejects SVG (can carry scripts), other types and oversized files", () => {
+    expect(validateLogoFile({ type: "image/svg+xml", size: 100 })).toMatch(/PNG, JPG o WebP/)
+    expect(validateLogoFile({ type: "application/pdf", size: 100 })).toMatch(/PNG, JPG o WebP/)
+    expect(validateLogoFile({ type: "image/png", size: LOGO_MAX_BYTES + 1 })).toMatch(/2 MB/)
   })
 })

@@ -18,7 +18,15 @@ export default function CandidateProfilePage() {
       <h1 className="text-2xl font-bold tracking-tight">Mi perfil</h1>
       <Card>
         <CardContent>
-          <Suspense fallback={<div className="h-72 animate-pulse rounded-lg bg-muted" aria-busy="true" aria-label="Cargando perfil" />}>
+          <Suspense
+            fallback={
+              <div
+                className="h-72 animate-pulse rounded-lg bg-muted"
+                aria-busy="true"
+                aria-label="Cargando perfil"
+              />
+            }
+          >
             <ProfileContent />
           </Suspense>
         </CardContent>

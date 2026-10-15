@@ -1,6 +1,6 @@
 // Demo data used while the app is front-only. Mirrors prisma/seed.ts (CLAUDE.md §7):
 // 2 companies, 10 jobs, and a few applications. Delete once Prisma is wired up.
-import type { Application, Candidate, Company, Job } from "@/lib/types"
+import type { Application, Candidate, Company, Job, JobAlert } from "@/lib/types"
 
 function daysAgo(days: number) {
   return new Date(Date.now() - days * 86_400_000)
@@ -22,8 +22,7 @@ export const companies: Company[] = [
     id: "cmp_2",
     name: "Café La Esquina",
     slug: "cafe-la-esquina",
-    description:
-      "Cadena de cafeterías de especialidad con 12 sucursales en Guadalajara y CDMX.",
+    description: "Cadena de cafeterías de especialidad con 12 sucursales en Guadalajara y CDMX.",
     logoUrl: null,
     website: null,
     location: "Guadalajara, Jal.",
@@ -34,12 +33,14 @@ export const companies: Company[] = [
 const jobBase = {
   currency: "MXN",
   closedAt: null,
+  featured: false,
 } as const
 
 export const jobs: Job[] = [
   {
     ...jobBase,
     id: "job_1",
+    featured: true,
     companyId: "cmp_1",
     title: "Desarrollador Frontend (React)",
     slug: "desarrollador-frontend-react",
@@ -62,8 +63,7 @@ export const jobs: Job[] = [
     companyId: "cmp_1",
     title: "Desarrollador Backend (Node.js)",
     slug: "desarrollador-backend-node",
-    description:
-      "Diseña y mantén servicios que procesan miles de envíos al día.",
+    description: "Diseña y mantén servicios que procesan miles de envíos al día.",
     requirements:
       "- 3+ años con Node.js\n- PostgreSQL\n- Docker\n- Deseable: experiencia con colas de mensajes",
     location: null,
@@ -129,6 +129,7 @@ export const jobs: Job[] = [
   {
     ...jobBase,
     id: "job_6",
+    featured: true,
     companyId: "cmp_2",
     title: "Barista",
     slug: "barista",
@@ -325,5 +326,26 @@ export const applications: Application[] = [
     message: null,
     status: "SUBMITTED",
     createdAt: daysAgo(0),
+  },
+]
+
+export const jobAlerts: JobAlert[] = [
+  {
+    id: "alert_1",
+    candidateId: "cand_1",
+    q: "frontend",
+    city: "Monterrey",
+    workMode: null,
+    frequency: "DAILY",
+    createdAt: daysAgo(12),
+  },
+  {
+    id: "alert_2",
+    candidateId: "cand_1",
+    q: null,
+    city: null,
+    workMode: "REMOTE",
+    frequency: "WEEKLY",
+    createdAt: daysAgo(3),
   },
 ]

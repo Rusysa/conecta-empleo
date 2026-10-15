@@ -80,7 +80,10 @@ export function ApplicantsTable({
   }
 
   const counts = Object.fromEntries(
-    FILTERS.map((f) => [f, f === "ALL" ? applicants.length : applicants.filter((a) => a.status === f).length])
+    FILTERS.map((f) => [
+      f,
+      f === "ALL" ? applicants.length : applicants.filter((a) => a.status === f).length,
+    ])
   ) as Record<Filter, number>
   const visible = filter === "ALL" ? applicants : applicants.filter((a) => a.status === filter)
 
@@ -106,7 +109,12 @@ export function ApplicantsTable({
               onClick={() => setFilter(f)}
             >
               {f === "ALL" ? "Todas" : APPLICATION_STATUS_LABELS[f]}
-              <span className={cn("tabular-nums", filter === f ? "opacity-80" : "text-muted-foreground")}>
+              <span
+                className={cn(
+                  "tabular-nums",
+                  filter === f ? "opacity-80" : "text-muted-foreground"
+                )}
+              >
                 {counts[f]}
               </span>
             </Button>
@@ -168,7 +176,9 @@ export function ApplicantsTable({
                       {app.phone}
                     </a>
                   </TableCell>
-                  <TableCell className="text-muted-foreground">{formatDate(app.createdAt)}</TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {formatDate(app.createdAt)}
+                  </TableCell>
                   <TableCell>
                     <StatusSelect
                       value={app.status}
@@ -203,11 +213,15 @@ export function ApplicantsTable({
             <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
               <dt className="text-muted-foreground">Correo</dt>
               <dd className="break-all">
-                <a href={`mailto:${detail.email}`} className="hover:underline">{detail.email}</a>
+                <a href={`mailto:${detail.email}`} className="hover:underline">
+                  {detail.email}
+                </a>
               </dd>
               <dt className="text-muted-foreground">Teléfono</dt>
               <dd>
-                <a href={`tel:${detail.phone.replace(/\s/g, "")}`} className="hover:underline">{detail.phone}</a>
+                <a href={`tel:${detail.phone.replace(/\s/g, "")}`} className="hover:underline">
+                  {detail.phone}
+                </a>
               </dd>
               <dt className="text-muted-foreground">Estado</dt>
               <dd>

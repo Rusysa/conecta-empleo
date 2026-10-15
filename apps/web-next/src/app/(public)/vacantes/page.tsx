@@ -6,23 +6,33 @@ import { Button } from "@/components/ui/button"
 import { JobCard } from "@/components/jobs/job-card"
 import { JobFilters } from "@/components/jobs/job-filters"
 import { JobsPagination } from "@/components/jobs/jobs-pagination"
+import { CreateAlertDialog } from "@/components/jobs/create-alert-dialog"
 import { buildJobsHref, parseJobSearchParams } from "@/lib/job-search-params"
+import { getSession } from "@/lib/session"
 import { getActiveJobs } from "@/server/queries/jobs"
 
 export const metadata: Metadata = { title: "Vacantes" }
 
 export default async function JobsPage({ searchParams }: PageProps<"/vacantes">) {
   const params = parseJobSearchParams(await searchParams)
-  const { items, total, page, pageCount } = await getActiveJobs(params)
+  const [{ items, total, page, pageCount }, session] = await Promise.all([
+    getActiveJobs(params),
+    getSession(),
+  ])
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
       <h1 className="text-2xl font-bold tracking-tight">Vacantes</h1>
       <JobFilters q={params.q} city={params.city} modalidad={params.modalidad} />
 
-      <p className="text-sm text-muted-foreground" aria-live="polite">
-        {total === 1 ? "1 vacante encontrada" : `${total} vacantes encontradas`}
-      </p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-muted-foreground" aria-live="polite">
+          {total === 1 ? "1 vacante encontrada" : `${total} vacantes encontradas`}
+        </p>
+        {session?.role === "CANDIDATE" && (
+          <CreateAlertDialog q={params.q} city={params.city} workMode={params.workMode} />
+        )}
+      </div>
 
       {items.length > 0 ? (
         <div className="grid gap-3">

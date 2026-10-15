@@ -22,7 +22,9 @@ export default function CompanyProfilePage() {
           <CardDescription>Los candidatos verán esta información en tus vacantes.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Suspense fallback={<div className="h-72 animate-pulse rounded-lg bg-muted" aria-busy="true" />}>
+          <Suspense
+            fallback={<div className="h-72 animate-pulse rounded-lg bg-muted" aria-busy="true" />}
+          >
             <ProfileContent />
           </Suspense>
         </CardContent>

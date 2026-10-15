@@ -19,7 +19,10 @@ export function ErrorState({
   }, [error])
 
   return (
-    <div role="alert" className="mx-auto flex max-w-md flex-col items-center gap-4 px-4 py-24 text-center">
+    <div
+      role="alert"
+      className="mx-auto flex max-w-md flex-col items-center gap-4 px-4 py-24 text-center"
+    >
       <TriangleAlert className="size-10 text-destructive" aria-hidden />
       <h1 className="text-xl font-semibold">Algo salió mal</h1>
       <p className="text-muted-foreground">

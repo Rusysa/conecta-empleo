@@ -1,0 +1,10 @@
+.next/
+node_modules/
+test-results/
+playwright-report/
+next-env.d.ts
+# Vendored shadcn/ui components: keep them identical to upstream for easy updates.
+src/components/ui/
+# Hand-written spec (source of truth) and Next-generated agent notes: keep as authored.
+CLAUDE.md
+AGENTS.md

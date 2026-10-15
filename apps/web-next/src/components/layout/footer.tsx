@@ -1,11 +1,9 @@
 import Link from "next/link"
 
-
 async function CurrentYear() {
   "use cache"
   return new Date().getFullYear()
 }
-
 
 export function Footer() {
   return (
@@ -17,6 +15,9 @@ export function Footer() {
         <nav aria-label="Pie de página" className="flex gap-4">
           <Link href="/vacantes" className="hover:text-foreground">
             Vacantes
+          </Link>
+          <Link href="/planes" className="hover:text-foreground">
+            Planes
           </Link>
           <Link href="/privacidad" className="hover:text-foreground">
             Aviso de privacidad

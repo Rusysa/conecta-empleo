@@ -11,10 +11,17 @@ export const jobSchema = z
   .object({
     title: z.string().trim().min(3, "Ingresa el título de la vacante").max(120),
     description: z.string().trim().min(20, "Describe la vacante (mínimo 20 caracteres)").max(5000),
-    requirements: z.string().trim().min(10, "Indica los requisitos (mínimo 10 caracteres)").max(5000),
+    requirements: z
+      .string()
+      .trim()
+      .min(10, "Indica los requisitos (mínimo 10 caracteres)")
+      .max(5000),
     location: z.string().trim().max(100),
     workMode: z.enum(["ONSITE", "REMOTE", "HYBRID"], "Elige una modalidad"),
-    employmentType: z.enum(["FULL_TIME", "PART_TIME", "CONTRACT", "INTERNSHIP"], "Elige un tipo de contrato"),
+    employmentType: z.enum(
+      ["FULL_TIME", "PART_TIME", "CONTRACT", "INTERNSHIP"],
+      "Elige un tipo de contrato"
+    ),
     salaryMin: salary,
     salaryMax: salary,
   })

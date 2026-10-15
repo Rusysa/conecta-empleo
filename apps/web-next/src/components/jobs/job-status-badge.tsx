@@ -6,13 +6,10 @@ const VARIANTS = {
   DRAFT: "outline",
   ACTIVE: "default",
   PAUSED: "secondary",
-  CLOSED: "secondary",
+  // Outline, not muted text on gray: that combination fails WCAG AA contrast.
+  CLOSED: "outline",
 } as const
 
 export function JobStatusBadge({ status }: { status: JobStatus }) {
-  return (
-    <Badge variant={VARIANTS[status]} className={status === "CLOSED" ? "text-muted-foreground" : undefined}>
-      {JOB_STATUS_LABELS[status]}
-    </Badge>
-  )
+  return <Badge variant={VARIANTS[status]}>{JOB_STATUS_LABELS[status]}</Badge>
 }

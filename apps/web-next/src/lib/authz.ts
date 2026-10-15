@@ -25,3 +25,11 @@ export async function requireCompany(currentPath: string) {
   // TODO(backend): use the company id from the API once jobs are persisted.
   return { ...session, companyId: companies[0].id }
 }
+
+/** Ensures the visitor is an ADMIN (fase 3); otherwise redirects (to login or home). */
+export async function requireAdmin(currentPath: string) {
+  const session = await getSession()
+  if (!session) redirect(`/login?callbackUrl=${encodeURIComponent(currentPath)}`)
+  // TODO(backend): the API only knows candidate/employer, so nobody is an admin yet.
+  redirect("/")
+}

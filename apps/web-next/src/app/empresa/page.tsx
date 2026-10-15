@@ -5,7 +5,16 @@ import { Plus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import { StatusBadge } from "@/components/applications/status-badge"
+import { JobStatusBadge } from "@/components/jobs/job-status-badge"
 import { requireCompany } from "@/lib/authz"
 import { formatRelativeDate } from "@/lib/format"
 import { getCompanyDashboard } from "@/server/queries/company"
@@ -29,10 +38,61 @@ async function Dashboard() {
   return (
     <>
       <div className="grid gap-3 sm:grid-cols-3">
-        <StatTile label="Vacantes activas" value={data.activeJobs} hint={`de ${data.totalJobs} en total`} />
+        <StatTile
+          label="Vacantes activas"
+          value={data.activeJobs}
+          hint={`de ${data.totalJobs} en total`}
+        />
         <StatTile label="Postulantes" value={data.totalApplicants} hint="en todas tus vacantes" />
-        <StatTile label="Postulaciones sin revisar" value={data.newApplicants} hint="con estado Enviada" />
+        <StatTile
+          label="Postulaciones sin revisar"
+          value={data.newApplicants}
+          hint="con estado Enviada"
+        />
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Postulantes por vacante</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {data.jobs.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No tienes vacantes abiertas.</p>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Vacante</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead className="text-right">Postulantes</TableHead>
+                  <TableHead className="text-right">Sin revisar</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.jobs.map((job) => (
+                  <TableRow key={job.id}>
+                    <TableCell className="font-medium whitespace-normal">
+                      <Link
+                        href={`/empresa/vacantes/${job.id}/postulantes`}
+                        className="hover:underline"
+                      >
+                        {job.title}
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <JobStatusBadge status={job.status} />
+                    </TableCell>
+                    <TableCell className="text-right tabular-nums">{job.applicantCount}</TableCell>
+                    <TableCell className="text-right tabular-nums">
+                      {job.newApplicantCount}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
@@ -50,7 +110,10 @@ async function Dashboard() {
                   <div className="min-w-0 flex-1">
                     <p className="font-medium">{app.fullName}</p>
                     <p className="text-sm text-muted-foreground">
-                      <Link href={`/empresa/vacantes/${app.jobId}/postulantes`} className="hover:underline">
+                      <Link
+                        href={`/empresa/vacantes/${app.jobId}/postulantes`}
+                        className="hover:underline"
+                      >
                         {app.jobTitle}
                       </Link>{" "}
                       · {formatRelativeDate(app.createdAt)}

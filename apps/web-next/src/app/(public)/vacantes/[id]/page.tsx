@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator"
 import { ApplyButton } from "@/components/jobs/apply-button"
 import { CompanyLogo } from "@/components/jobs/company-logo"
 import { JobMeta } from "@/components/jobs/job-meta"
+import { MarkdownContent } from "@/components/jobs/markdown-content"
 import { APP_URL } from "@/lib/app-url"
 import { formatDate } from "@/lib/format"
 import { buildJobPostingJsonLd, serializeJsonLd } from "@/lib/seo/job-posting"
@@ -19,9 +20,7 @@ function summarize(text: string, max = 155) {
   return flat.length > max ? `${flat.slice(0, max - 1).trimEnd()}…` : flat
 }
 
-export async function generateMetadata({
-  params,
-}: PageProps<"/vacantes/[id]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/vacantes/[id]">): Promise<Metadata> {
   const job = await getPublicJobById((await params).id)
   if (!job) return { title: "Vacante no encontrada" }
 
@@ -76,11 +75,11 @@ export default async function JobDetailPage({ params }: PageProps<"/vacantes/[id
 
           <section className="space-y-2">
             <h2 className="text-lg font-semibold">Descripción</h2>
-            <p className="whitespace-pre-line text-muted-foreground">{job.description}</p>
+            <MarkdownContent>{job.description}</MarkdownContent>
           </section>
           <section className="space-y-2">
             <h2 className="text-lg font-semibold">Requisitos</h2>
-            <p className="whitespace-pre-line text-muted-foreground">{job.requirements}</p>
+            <MarkdownContent>{job.requirements}</MarkdownContent>
           </section>
         </article>
 
