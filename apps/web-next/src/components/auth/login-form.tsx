@@ -10,12 +10,8 @@ import { Button } from "@/components/ui/button"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { setMockRoleCookie } from "@/components/layout/mock-role-cookie"
+import { safeRedirectPath } from "@/lib/safe-redirect"
 import { loginSchema, type LoginInput } from "@/lib/validations/auth"
-
-/** Only allow same-origin relative redirects. */
-function safeCallback(url: string | undefined) {
-  return url?.startsWith("/") && !url.startsWith("//") ? url : "/vacantes"
-}
 
 export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
   const router = useRouter()
@@ -29,7 +25,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
     await new Promise((r) => setTimeout(r, 600))
     console.info("login (mock)", values.email)
     setMockRoleCookie("CANDIDATE")
-    router.push(safeCallback(callbackUrl))
+    router.push(safeRedirectPath(callbackUrl) ?? "/vacantes")
     router.refresh()
   }
 
