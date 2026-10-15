@@ -10,6 +10,7 @@ import {
   MoreHorizontal,
   Pencil,
   Send,
+  Star,
   Users,
 } from "lucide-react"
 import { toast } from "sonner"
@@ -140,6 +141,13 @@ export function CompanyJobsTable({ jobs: initialJobs }: { jobs: CompanyJobRow[] 
                         <DropdownMenuItem asChild>
                           <Link href={`/vacantes/${job.id}`} target="_blank">
                             <Eye /> Ver publicación
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
+                      {job.status === "ACTIVE" && !job.featured && (
+                        <DropdownMenuItem asChild>
+                          <Link href="/planes">
+                            <Star /> Destacar
                           </Link>
                         </DropdownMenuItem>
                       )}

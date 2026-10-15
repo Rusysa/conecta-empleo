@@ -22,7 +22,7 @@ export async function ApplyButton({ job }: { job: JobWithCompany }) {
     )
   }
 
-  if (session.role === "COMPANY") {
+  if (session.role !== "CANDIDATE") {
     return (
       <p className="flex gap-2 rounded-lg bg-muted p-3 text-sm text-muted-foreground">
         <Info className="mt-0.5 size-4 shrink-0" aria-hidden />

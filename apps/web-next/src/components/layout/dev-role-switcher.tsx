@@ -17,6 +17,7 @@ const OPTIONS: { value: MockRole; label: string }[] = [
   { value: "CANDIDATE", label: "Candidato (perfil completo)" },
   { value: "CANDIDATE_INCOMPLETE", label: "Candidato (sin CV)" },
   { value: "COMPANY", label: "Empresa" },
+  { value: "ADMIN", label: "Administrador" },
 ]
 
 /** Dev-only helper to preview the UI as each role. Remove when Auth.js lands. */

@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
       // Private areas and one-time-token pages are never indexed.
-      disallow: ["/candidato/", "/empresa/", "/api/", "/recuperar/nueva", "/verificar"],
+      disallow: ["/candidato/", "/empresa/", "/admin", "/api/", "/recuperar/nueva", "/verificar"],
     },
     sitemap: `${APP_URL}/sitemap.xml`,
   }

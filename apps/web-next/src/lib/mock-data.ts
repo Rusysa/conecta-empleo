@@ -1,6 +1,6 @@
 // Demo data used while the app is front-only. Mirrors prisma/seed.ts (CLAUDE.md §7):
 // 2 companies, 10 jobs, and a few applications. Delete once Prisma is wired up.
-import type { Application, Candidate, Company, Job } from "@/lib/types"
+import type { Application, Candidate, Company, Job, JobAlert } from "@/lib/types"
 
 function daysAgo(days: number) {
   return new Date(Date.now() - days * 86_400_000)
@@ -33,12 +33,14 @@ export const companies: Company[] = [
 const jobBase = {
   currency: "MXN",
   closedAt: null,
+  featured: false,
 } as const
 
 export const jobs: Job[] = [
   {
     ...jobBase,
     id: "job_1",
+    featured: true,
     companyId: "cmp_1",
     title: "Desarrollador Frontend (React)",
     slug: "desarrollador-frontend-react",
@@ -127,6 +129,7 @@ export const jobs: Job[] = [
   {
     ...jobBase,
     id: "job_6",
+    featured: true,
     companyId: "cmp_2",
     title: "Barista",
     slug: "barista",
@@ -323,5 +326,26 @@ export const applications: Application[] = [
     message: null,
     status: "SUBMITTED",
     createdAt: daysAgo(0),
+  },
+]
+
+export const jobAlerts: JobAlert[] = [
+  {
+    id: "alert_1",
+    candidateId: "cand_1",
+    q: "frontend",
+    city: "Monterrey",
+    workMode: null,
+    frequency: "DAILY",
+    createdAt: daysAgo(12),
+  },
+  {
+    id: "alert_2",
+    candidateId: "cand_1",
+    q: null,
+    city: null,
+    workMode: "REMOTE",
+    frequency: "WEEKLY",
+    createdAt: daysAgo(3),
   },
 ]

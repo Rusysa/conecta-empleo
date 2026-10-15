@@ -11,7 +11,9 @@ function withCompany(job: (typeof jobs)[number]): JobWithCompany {
   return { ...job, company }
 }
 
-function byPublishedDesc(a: JobWithCompany, b: JobWithCompany) {
+/** Featured (paid) jobs first, then most recently published. */
+function byFeaturedThenPublished(a: JobWithCompany, b: JobWithCompany) {
+  if (a.featured !== b.featured) return a.featured ? -1 : 1
   return (b.publishedAt?.getTime() ?? 0) - (a.publishedAt?.getTime() ?? 0)
 }
 
@@ -31,7 +33,7 @@ export async function getActiveJobs({ q, city, workMode, page = 1 }: JobSearchPa
   let items = jobs
     .filter((j) => j.status === "ACTIVE")
     .map(withCompany)
-    .sort(byPublishedDesc)
+    .sort(byFeaturedThenPublished)
 
   if (q) {
     const term = normalize(q)
@@ -65,7 +67,7 @@ export async function getRecentJobs(limit = 6) {
   return jobs
     .filter((j) => j.status === "ACTIVE")
     .map(withCompany)
-    .sort(byPublishedDesc)
+    .sort(byFeaturedThenPublished)
     .slice(0, limit)
 }
 
@@ -85,6 +87,6 @@ export async function getCompanyWithActiveJobs(
   const companyJobs = jobs
     .filter((j) => j.companyId === company.id && j.status === "ACTIVE")
     .map(withCompany)
-    .sort(byPublishedDesc)
+    .sort(byFeaturedThenPublished)
   return { company, jobs: companyJobs }
 }

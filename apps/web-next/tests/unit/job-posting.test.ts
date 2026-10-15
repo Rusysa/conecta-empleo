@@ -19,6 +19,7 @@ const job: JobWithCompany = {
   status: "ACTIVE",
   publishedAt: new Date("2026-10-01T00:00:00Z"),
   closedAt: null,
+  featured: false,
   createdAt: new Date("2026-09-30T00:00:00Z"),
   company: {
     id: "cmp_1",

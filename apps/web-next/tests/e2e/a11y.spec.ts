@@ -19,6 +19,10 @@ const PAGES: { path: string; role: MockRole }[] = [
   { path: "/empresa/vacantes", role: "COMPANY" },
   { path: "/empresa/vacantes/nueva", role: "COMPANY" },
   { path: "/empresa/vacantes/job_1/postulantes", role: "COMPANY" },
+  { path: "/planes", role: "GUEST" },
+  { path: "/candidato/alertas", role: "CANDIDATE" },
+  { path: "/admin", role: "ADMIN" },
+  { path: "/admin/vacantes", role: "ADMIN" },
 ]
 
 for (const theme of ["light", "dark"] as const) {

@@ -7,6 +7,7 @@ export function getNavLinks(session: MockSession): NavLink[] {
   if (session?.role === "CANDIDATE") {
     links.push(
       { href: "/candidato/postulaciones", label: "Mis postulaciones" },
+      { href: "/candidato/alertas", label: "Alertas" },
       { href: "/candidato/perfil", label: "Mi perfil" }
     )
   }
@@ -15,6 +16,9 @@ export function getNavLinks(session: MockSession): NavLink[] {
       { href: "/empresa", label: "Panel" },
       { href: "/empresa/vacantes", label: "Mis vacantes" }
     )
+  }
+  if (session?.role === "ADMIN") {
+    links.push({ href: "/admin", label: "Administración" })
   }
   return links
 }

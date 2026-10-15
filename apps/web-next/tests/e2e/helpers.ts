@@ -1,6 +1,6 @@
 import type { BrowserContext } from "@playwright/test"
 
-export type MockRole = "GUEST" | "CANDIDATE" | "CANDIDATE_INCOMPLETE" | "COMPANY"
+export type MockRole = "GUEST" | "CANDIDATE" | "CANDIDATE_INCOMPLETE" | "COMPANY" | "ADMIN"
 
 /** Logs in as a mock role (same cookie the dev role switcher sets). Replace once Auth.js lands. */
 export async function loginAs(context: BrowserContext, role: MockRole, baseURL: string) {

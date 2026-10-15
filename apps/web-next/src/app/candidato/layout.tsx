@@ -11,6 +11,7 @@ export default function CandidateLayout({ children }: LayoutProps<"/candidato">)
         label="Área de candidato"
         links={[
           { href: "/candidato/postulaciones", label: "Mis postulaciones" },
+          { href: "/candidato/alertas", label: "Alertas" },
           { href: "/candidato/perfil", label: "Mi perfil" },
         ]}
       />

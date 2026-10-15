@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest"
 import { actionErrorMessage } from "@/lib/action-result"
 import { escapeCsvCell, toCsv } from "@/lib/csv"
 import { formatSalary } from "@/lib/format"
+import { describeAlert } from "@/lib/job-alerts"
 import { buildJobsHref, parseJobSearchParams } from "@/lib/job-search-params"
 import { safeRedirectPath } from "@/lib/safe-redirect"
 
@@ -94,5 +95,16 @@ describe("actionErrorMessage", () => {
 
   it("falls back to a generic message", () => {
     expect(actionErrorMessage({ code: "UNKNOWN" })).toBe("Algo salió mal. Intenta de nuevo.")
+  })
+})
+
+describe("describeAlert", () => {
+  it("summarizes the saved search", () => {
+    expect(describeAlert({ q: "frontend", city: "Monterrey", workMode: null })).toBe(
+      "“frontend” en Monterrey"
+    )
+    expect(describeAlert({ q: null, city: null, workMode: "REMOTE" })).toBe(
+      "Todas las vacantes · Remoto"
+    )
   })
 })

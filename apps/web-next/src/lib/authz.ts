@@ -21,3 +21,11 @@ export async function requireCompany(currentPath: string) {
   if (session.role !== "COMPANY") redirect("/")
   return session
 }
+
+/** Ensures the visitor is an ADMIN (fase 3); otherwise redirects (to login or home). */
+export async function requireAdmin(currentPath: string) {
+  const session = await getMockSession()
+  if (!session) redirect(`/login?callbackUrl=${encodeURIComponent(currentPath)}`)
+  if (session.role !== "ADMIN") redirect("/")
+  return session
+}

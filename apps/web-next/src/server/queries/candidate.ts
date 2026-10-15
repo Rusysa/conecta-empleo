@@ -1,8 +1,8 @@
 // Read-side for the candidate area. Mock-backed; keep signatures when moving to Prisma.
 import { connection } from "next/server"
 
-import { applications, candidates, companies, jobs } from "@/lib/mock-data"
-import type { Application, Candidate, Company, Job } from "@/lib/types"
+import { applications, candidates, companies, jobAlerts, jobs } from "@/lib/mock-data"
+import type { Application, Candidate, Company, Job, JobAlert } from "@/lib/types"
 
 export type CandidateApplication = Application & {
   job: Pick<Job, "id" | "title" | "status"> & { company: Pick<Company, "name" | "slug"> }
@@ -50,4 +50,11 @@ export async function getCandidateApplications(
         },
       }
     })
+}
+
+export async function getCandidateAlerts(candidateId: string): Promise<JobAlert[]> {
+  await connection()
+  return jobAlerts
+    .filter((a) => a.candidateId === candidateId)
+    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
 }

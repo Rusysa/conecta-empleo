@@ -34,6 +34,8 @@ export type Job = {
   status: JobStatus
   publishedAt: Date | null
   closedAt: Date | null
+  /** Paid placement: shown first in listings with a "Destacada" badge (fase 3). */
+  featured: boolean
   createdAt: Date
 }
 
@@ -59,5 +61,18 @@ export type Application = {
   phone: string
   message: string | null
   status: ApplicationStatus
+  createdAt: Date
+}
+
+export type AlertFrequency = "DAILY" | "WEEKLY"
+
+/** Saved search a candidate gets emailed about (fase 3). */
+export type JobAlert = {
+  id: string
+  candidateId: string
+  q: string | null
+  city: string | null
+  workMode: WorkMode | null
+  frequency: AlertFrequency
   createdAt: Date
 }

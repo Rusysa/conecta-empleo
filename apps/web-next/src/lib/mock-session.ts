@@ -9,7 +9,7 @@ import { applications, candidates, companies } from "@/lib/mock-data"
 
 export const MOCK_ROLE_COOKIE = "mock_role"
 
-export type MockRole = "GUEST" | "CANDIDATE" | "CANDIDATE_INCOMPLETE" | "COMPANY"
+export type MockRole = "GUEST" | "CANDIDATE" | "CANDIDATE_INCOMPLETE" | "COMPANY" | "ADMIN"
 
 export type MockSession =
   | {
@@ -20,11 +20,12 @@ export type MockSession =
       emailVerified: boolean
     }
   | { role: "COMPANY"; email: string; companyId: string; emailVerified: boolean }
+  | { role: "ADMIN"; email: string; emailVerified: boolean }
   | null
 
 export async function getMockRole(): Promise<MockRole> {
   const value = (await cookies()).get(MOCK_ROLE_COOKIE)?.value
-  const roles: MockRole[] = ["GUEST", "CANDIDATE", "CANDIDATE_INCOMPLETE", "COMPANY"]
+  const roles: MockRole[] = ["GUEST", "CANDIDATE", "CANDIDATE_INCOMPLETE", "COMPANY", "ADMIN"]
   return roles.includes(value as MockRole) ? (value as MockRole) : "GUEST"
 }
 
@@ -48,6 +49,9 @@ export async function getMockSession(): Promise<MockSession> {
       companyId: companies[0].id,
       emailVerified: true,
     }
+  }
+  if (role === "ADMIN") {
+    return { role: "ADMIN", email: "admin@bolsadetrabajo.mx", emailVerified: true }
   }
   return null
 }

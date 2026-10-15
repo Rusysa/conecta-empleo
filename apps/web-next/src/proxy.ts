@@ -7,6 +7,7 @@ import { NextResponse, type NextRequest } from "next/server"
 const AREA_ROLES: { prefix: string; roles: string[] }[] = [
   { prefix: "/candidato", roles: ["CANDIDATE", "CANDIDATE_INCOMPLETE"] },
   { prefix: "/empresa", roles: ["COMPANY"] },
+  { prefix: "/admin", roles: ["ADMIN"] },
 ]
 
 export function proxy(request: NextRequest) {
@@ -28,5 +29,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/candidato/:path*", "/empresa/:path*"],
+  matcher: ["/candidato/:path*", "/empresa/:path*", "/admin/:path*"],
 }
