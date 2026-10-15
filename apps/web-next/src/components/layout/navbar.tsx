@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { getMockSession } from "@/lib/mock-session"
 import { getNavLinks } from "@/components/layout/nav-links"
 import { MobileNav } from "@/components/layout/mobile-nav"
+import { ThemeToggle } from "@/components/layout/theme-toggle"
 import { UserMenu } from "@/components/layout/user-menu"
 
 export function Navbar() {
@@ -19,6 +20,7 @@ export function Navbar() {
         <Suspense fallback={<div className="ml-auto h-8 w-40 animate-pulse rounded-lg bg-muted" />}>
           <SessionNav />
         </Suspense>
+        <ThemeToggle />
       </div>
     </header>
   )

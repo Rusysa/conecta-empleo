@@ -13,7 +13,10 @@ pnpm install
 pnpm dev:web-next      # http://localhost:3000
 pnpm build:web-next
 pnpm test:web-next     # pruebas unitarias (Vitest)
+pnpm test:e2e:web-next # pruebas e2e (Playwright), compila y levanta la app en :3100
 ```
+
+La primera vez, instala el navegador de Playwright con `pnpm --filter @conecta/web-next exec playwright install chromium`.
 
 Variables de entorno: copia `apps/web-next/.env.example` a `apps/web-next/.env.local`.
 

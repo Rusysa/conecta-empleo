@@ -81,7 +81,8 @@ export function CvUpload({
       )}
 
       <Field data-invalid={Boolean(error)}>
-        <FieldLabel htmlFor="cv">{current ? "Reemplazar CV" : "Subir CV"}</FieldLabel>
+        {/* Distinct from the submit button's name so assistive tech can tell them apart. */}
+        <FieldLabel htmlFor="cv">{current ? "Nuevo archivo del CV" : "Archivo del CV"}</FieldLabel>
         <Input
           ref={inputRef}
           id="cv"
