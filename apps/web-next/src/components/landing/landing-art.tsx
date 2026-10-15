@@ -431,3 +431,152 @@ export const CATEGORY_ICONS = {
     </>
   ),
 }
+
+/* ---------- Island: palm trees and sea ---------- */
+
+type Point = [number, number]
+const round = (n: number) => Math.round(n * 10) / 10
+
+/** Points along a quadratic curve from `start` to `end`, with unit normals. */
+function sampleCurve(start: Point, ctrl: Point, end: Point, steps: number) {
+  return Array.from({ length: steps + 1 }, (_, i) => {
+    const t = i / steps
+    const a = (1 - t) ** 2
+    const b = 2 * (1 - t) * t
+    const c = t ** 2
+    const x = a * start[0] + b * ctrl[0] + c * end[0]
+    const y = a * start[1] + b * ctrl[1] + c * end[1]
+    const dx = 2 * (1 - t) * (ctrl[0] - start[0]) + 2 * t * (end[0] - ctrl[0])
+    const dy = 2 * (1 - t) * (ctrl[1] - start[1]) + 2 * t * (end[1] - ctrl[1])
+    const len = Math.hypot(dx, dy) || 1
+    return { t, x, y, nx: -dy / len, ny: dx / len }
+  })
+}
+
+/** A pinnate palm frond growing from the crown (0,0): jagged edges read as leaflets. */
+function frondPath(ctrl: Point, end: Point, width: number) {
+  const pts = sampleCurve([0, 0], ctrl, end, 18)
+  const side = (dir: 1 | -1) =>
+    pts.map(({ t, x, y, nx, ny }, i) => {
+      const w = width * Math.sin(Math.PI * t) ** 0.6 * (i % 2 ? 0.45 : 1)
+      return `${round(x + nx * w * dir)} ${round(y + ny * w * dir)}`
+    })
+  return `M${side(1).join(" L")} L${side(-1).reverse().join(" L")} Z`
+}
+
+const TRUNK_BASE: Point = [-70, 590]
+const TRUNK_CTRL: Point = [-80, 260]
+
+/** Tapered, curved trunk from the base up to the crown, plus its growth rings. */
+function trunk() {
+  const pts = sampleCurve(TRUNK_BASE, TRUNK_CTRL, [0, 0], 14)
+  const width = (t: number) => 26 - 12 * t
+  const left = pts.map(
+    ({ t, x, y, nx, ny }) => `${round(x + nx * width(t))} ${round(y + ny * width(t))}`
+  )
+  const right = pts.map(
+    ({ t, x, y, nx, ny }) => `${round(x - nx * width(t))} ${round(y - ny * width(t))}`
+  )
+  const outline = `M${left.join(" L")} L${right.reverse().join(" L")} Z`
+  const rings = pts
+    .slice(1, -1)
+    .map(({ t, x, y, nx, ny }) => {
+      const w = width(t) - 2
+      return `M${round(x + nx * w)} ${round(y + ny * w)} L${round(x - nx * w)} ${round(y - ny * w)}`
+    })
+    .join(" ")
+  return { outline, rings }
+}
+
+// [control point, tip, half-width] for each frond, back layer first.
+const BACK_FRONDS: [Point, Point, number][] = [
+  [[-60, -120], [-30, -200], 24],
+  [[60, -120], [90, -185], 24],
+  [[-130, 10], [-150, 150], 26],
+  [[130, 10], [160, 140], 26],
+]
+const FRONT_FRONDS: [Point, Point, number][] = [
+  [[-120, -90], [-230, 40], 34],
+  [[120, -95], [235, 30], 34],
+  [[-80, -40], [-190, 190], 28],
+  [[80, -40], [195, 175], 28],
+  [[-5, -100], [10, -215], 22],
+]
+
+const PALM_TRUNK = trunk()
+const PALM_BACK = BACK_FRONDS.map(([c, e, w]) => frondPath(c, e, w))
+const PALM_FRONT = FRONT_FRONDS.map(([c, e, w]) => frondPath(c, e, w))
+
+/**
+ * Palm tree drawn in the landing's sticker style (black outline + offset shadow).
+ * The body sways from the base and the crown rustles on its own (CSS, see landing.css).
+ */
+export function Palm({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="-260 -240 520 840" aria-hidden>
+      <g className="palm__body">
+        <g transform="translate(8 9)" fill="#000">
+          <path d={PALM_TRUNK.outline} />
+          {PALM_FRONT.map((d) => (
+            <path key={d} d={d} />
+          ))}
+        </g>
+        <path
+          d={PALM_TRUNK.outline}
+          fill="#c98a4b"
+          stroke="#000"
+          strokeWidth="3"
+          strokeLinejoin="round"
+        />
+        <path
+          d={PALM_TRUNK.rings}
+          stroke="#000"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          fill="none"
+        />
+        <g className="palm__crown" stroke="#000" strokeWidth="3" strokeLinejoin="round">
+          {PALM_BACK.map((d) => (
+            <path key={d} d={d} fill="#135c36" />
+          ))}
+          {PALM_FRONT.map((d) => (
+            <path key={d} d={d} fill="#2a9d5c" />
+          ))}
+          <circle cx="-15" cy="16" r="15" fill="#6b3b1f" />
+          <circle cx="13" cy="20" r="15" fill="#6b3b1f" />
+          <circle cx="0" cy="2" r="15" fill="#8a4f28" />
+        </g>
+      </g>
+    </svg>
+  )
+}
+
+/** Lagoon water along the bottom edge of an island frame. */
+export function Sea() {
+  return (
+    <div className="sea" aria-hidden>
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+        <path
+          d="M0 40 C 180 10, 360 70, 540 40 S 900 10, 1080 40 S 1320 70, 1440 36 V120 H0 Z"
+          fill="#8fe0d6"
+        />
+        <path
+          d="M0 64 C 200 34, 380 94, 600 62 S 980 34, 1180 62 S 1380 88, 1440 60 V120 H0 Z"
+          fill="#12b5a5"
+        />
+        <path
+          d="M0 64 C 200 34, 380 94, 600 62 S 980 34, 1180 62 S 1380 88, 1440 60"
+          fill="none"
+          stroke="#fff"
+          strokeWidth="4"
+          strokeLinecap="round"
+          strokeDasharray="38 26"
+        />
+        <path
+          d="M0 92 C 240 72, 420 112, 700 90 S 1100 72, 1300 92 S 1420 104, 1440 96 V120 H0 Z"
+          fill="#0b8f83"
+        />
+      </svg>
+    </div>
+  )
+}

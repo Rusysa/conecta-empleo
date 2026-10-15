@@ -1,6 +1,7 @@
 /* Presentation landing (originally apps/landing/index.html).
    Every rule is scoped to .lp so it never leaks into the rest of the app,
-   which keeps using Tailwind + shadcn/ui. */
+   which keeps using Tailwind + shadcn/ui. Element resets skip shadcn parts ([data-slot]),
+   because unlayered rules here would otherwise beat Tailwind utilities. */
 
 .lp {
   --color-carbon: #000000;
@@ -48,11 +49,11 @@ html.lenis body {
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }
-.lp a {
+.lp :where(a:not([data-slot])) {
   color: inherit;
   text-decoration: none;
 }
-.lp button {
+.lp :where(button:not([data-slot])) {
   font: inherit;
   color: inherit;
   cursor: pointer;
@@ -1185,6 +1186,207 @@ html.lenis body {
 @media (prefers-reduced-motion: reduce) {
   .lp .marquee__track,
   .lp .logos__track {
+    animation: none;
+  }
+}
+
+/* ---------- Island: palms, sea and sand ---------- */
+.lp {
+  --color-lagoon: #12b5a5;
+  --color-lagoon-deep: #0b8f83;
+  --color-sand: #ffe7b8;
+  --color-palm: #2a9d5c;
+}
+.lp .bg-sand {
+  background: var(--color-sand);
+}
+.lp .job__pay small {
+  font-weight: 500;
+}
+.lp .palm {
+  position: absolute;
+  z-index: 1;
+  height: auto;
+  pointer-events: none;
+}
+.lp .palm--left {
+  left: -6%;
+  top: -40px;
+  width: clamp(190px, 25vw, 430px);
+  rotate: 16deg;
+}
+.lp .palm--right {
+  right: -6%;
+  top: -10px;
+  width: clamp(170px, 21vw, 370px);
+  rotate: -14deg;
+  scale: -1 1;
+}
+.lp .palm__body {
+  transform-box: view-box;
+  transform-origin: -70px 590px;
+  animation: lp-sway 9s ease-in-out infinite alternate;
+}
+.lp .palm__crown {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  animation: lp-rustle 4.2s ease-in-out infinite alternate;
+}
+.lp .palm--right .palm__body {
+  animation-delay: -3s;
+}
+@keyframes lp-sway {
+  from {
+    transform: rotate(-1.4deg);
+  }
+  to {
+    transform: rotate(1.8deg);
+  }
+}
+@keyframes lp-rustle {
+  from {
+    transform: rotate(-3deg);
+  }
+  to {
+    transform: rotate(2.5deg);
+  }
+}
+.lp .kpalm {
+  width: 0.95em;
+}
+.lp .sea {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: clamp(64px, 8vw, 120px);
+  z-index: 1;
+  pointer-events: none;
+}
+.lp .sea svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- /vacantes ---------- */
+.lp .jobs-hero {
+  padding: 150px 0 clamp(110px, 12vw, 170px);
+}
+.lp .jobs-hero .palm--left {
+  top: -60px;
+  width: clamp(150px, 19vw, 320px);
+}
+.lp .jobs-hero .palm--right {
+  top: -30px;
+  width: clamp(130px, 16vw, 280px);
+}
+.lp .jobs-hero__title {
+  font-size: clamp(84px, 17vw, 280px);
+  line-height: 0.8;
+}
+.lp .jobs-hero__count {
+  font-size: clamp(22px, 2.6vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 12px;
+}
+.lp .search--wide {
+  max-width: 980px;
+}
+.lp .modes {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+.lp .modes .pill[aria-current="true"] {
+  background: var(--color-carbon);
+  color: #fff;
+}
+.lp .results-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.lp .results-head h2 {
+  font-size: clamp(24px, 2.4vw, 32px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.lp .results-head__actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.lp .empty {
+  border: var(--lp-border);
+  border-radius: var(--radius-card-lg);
+  background: var(--color-sand);
+  padding: clamp(32px, 5vw, 64px);
+  display: grid;
+  gap: 16px;
+  justify-items: start;
+  max-width: 720px;
+}
+.lp .empty h3 {
+  font-size: clamp(28px, 3.4vw, 44px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.lp .empty p {
+  font-size: 18px;
+  max-width: 48ch;
+}
+.lp .pager {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 40px;
+}
+.lp .pager__status {
+  font-weight: 700;
+  padding: 0 12px;
+}
+.lp .pill[aria-disabled="true"] {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+@media (max-width: 760px) {
+  .lp .palm--left {
+    left: -20%;
+    top: -20px;
+    width: 52vw;
+  }
+  .lp .palm--right {
+    right: -20%;
+    width: 44vw;
+  }
+  /* On phones the palm stands on a strip of beach above the sea, clear of the nav. */
+  .lp .jobs-hero {
+    padding: 120px 0 230px;
+  }
+  .lp .jobs-hero .palm--left {
+    top: auto;
+    bottom: 24px;
+    left: 4%;
+    width: 34vw;
+    rotate: 6deg;
+  }
+  .lp .hero__tag {
+    margin-top: 0.3em;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lp .palm__body,
+  .lp .palm__crown {
     animation: none;
   }
 }

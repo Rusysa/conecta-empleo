@@ -25,10 +25,13 @@ export function CreateAlertDialog({
   q,
   city,
   workMode,
+  trigger,
 }: {
   q?: string
   city?: string
   workMode?: WorkMode
+  /** Custom trigger element (must accept a ref and onClick, e.g. a <button>). */
+  trigger?: React.ReactElement
 }) {
   const [open, setOpen] = useState(false)
   const [frequency, setFrequency] = useState<AlertFrequency>("DAILY")
@@ -50,9 +53,11 @@ export function CreateAlertDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          <Bell /> Crear alerta
-        </Button>
+        {trigger ?? (
+          <Button variant="outline" size="sm">
+            <Bell /> Crear alerta
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

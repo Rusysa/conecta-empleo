@@ -51,6 +51,10 @@ export function LandingMotion({ rootId }: { rootId: string }) {
     }
     hero?.addEventListener("pointermove", onPointerMove)
 
+    // Pages share this component but not every block ("/vacantes" has no stage or kinetic
+    // rows), so each one only runs when its elements exist (GSAP warns on empty targets).
+    const has = (selector: string) => root.querySelector(selector) !== null
+
     const ctx = gsap.context(() => {
       // Idle float for every sticker (their resting tilt comes from CSS `rotate: var(--r)`).
       gsap.utils.toArray<HTMLElement>(".stk").forEach((s, i) => {
@@ -66,20 +70,26 @@ export function LandingMotion({ rootId }: { rootId: string }) {
       })
 
       // 1. Intro: slot-machine roll of the wordmark + sticker pop + nav pills.
-      gsap
-        .timeline({ defaults: { ease: "expo.out" } })
-        .fromTo(
+      const intro = gsap.timeline({ defaults: { ease: "expo.out" } })
+      if (has(".js-roll")) {
+        intro.fromTo(
           ".js-roll .ch > span",
           { yPercent: 0 },
           { yPercent: -75, duration: 1.6, stagger: 0.07, ease: "power4.inOut" }
         )
-        .from("#ribbon", { scale: 1.15, opacity: 0, duration: 1.8 }, 0)
-        .from(
-          ".hero .js-pop",
+      }
+      if (has("#ribbon")) intro.from("#ribbon", { scale: 1.15, opacity: 0, duration: 1.8 }, 0)
+      if (has("#hero .js-pop")) {
+        intro.from(
+          "#hero .js-pop",
           { scale: 0, rotation: "-=60", duration: 1, stagger: 0.09, ease: "back.out(2.2)" },
           0.9
         )
-        .from(".hero .js-fade", { y: 40, opacity: 0, duration: 1, stagger: 0.1 }, 1)
+      }
+      if (has("#hero .js-fade")) {
+        intro.from("#hero .js-fade", { y: 40, opacity: 0, duration: 1, stagger: 0.1 }, 1)
+      }
+      intro
         .from(
           ".nav .logo, .nav__right > *",
           { y: -30, opacity: 0, duration: 0.8, stagger: 0.05, ease: "back.out(2)" },
@@ -106,13 +116,15 @@ export function LandingMotion({ rootId }: { rootId: string }) {
       })
 
       // 2. Ribbon drifts / twists with scroll.
-      gsap.to("#ribbon", {
-        yPercent: 18,
-        rotate: -6,
-        scale: 1.08,
-        ease: "none",
-        scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true },
-      })
+      if (has("#ribbon")) {
+        gsap.to("#ribbon", {
+          yPercent: 18,
+          rotate: -6,
+          scale: 1.08,
+          ease: "none",
+          scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true },
+        })
+      }
 
       // 3. Nav: pills hide when scrolling down and come back on scroll up.
       const pills = gsap.utils.toArray<HTMLElement>(".nav__pills .pill")
@@ -140,16 +152,18 @@ export function LandingMotion({ rootId }: { rootId: string }) {
       })
 
       // 4. Mockup stage grows as it scrolls in.
-      gsap.fromTo(
-        "#stage",
-        { scale: 0.72, borderRadius: 48 },
-        {
-          scale: 1,
-          borderRadius: 20,
-          ease: "none",
-          scrollTrigger: { trigger: "#stage", start: "top 95%", end: "top 15%", scrub: true },
-        }
-      )
+      if (has("#stage")) {
+        gsap.fromTo(
+          "#stage",
+          { scale: 0.72, borderRadius: 48 },
+          {
+            scale: 1,
+            borderRadius: 20,
+            ease: "none",
+            scrollTrigger: { trigger: "#stage", start: "top 95%", end: "top 15%", scrub: true },
+          }
+        )
+      }
       gsap.utils.toArray<HTMLElement>(".js-phone").forEach((p, i) => {
         gsap.fromTo(
           p,
@@ -186,14 +200,16 @@ export function LandingMotion({ rootId }: { rootId: string }) {
           }
         )
       })
-      gsap.from(".js-kpop", {
-        scale: 0,
-        rotate: -45,
-        duration: 0.9,
-        stagger: 0.12,
-        ease: "back.out(2.4)",
-        scrollTrigger: { trigger: ".kinetic", start: "top 70%" },
-      })
+      if (has(".js-kpop")) {
+        gsap.from(".js-kpop", {
+          scale: 0,
+          rotate: -45,
+          duration: 0.9,
+          stagger: 0.12,
+          ease: "back.out(2.4)",
+          scrollTrigger: { trigger: ".kinetic", start: "top 70%" },
+        })
+      }
 
       // 6. Line reveal on headings.
       gsap.utils.toArray<HTMLElement>(".js-lines").forEach((el) => {
@@ -244,16 +260,18 @@ export function LandingMotion({ rootId }: { rootId: string }) {
           )
         }
       })
-      gsap.to(".js-cursor", {
-        x: -10,
-        y: -10,
-        duration: 0.35,
-        repeat: -1,
-        yoyo: true,
-        repeatDelay: 0.9,
-        ease: "power2.inOut",
-        transformOrigin: "center",
-      })
+      if (has(".js-cursor")) {
+        gsap.to(".js-cursor", {
+          x: -10,
+          y: -10,
+          duration: 0.35,
+          repeat: -1,
+          yoyo: true,
+          repeatDelay: 0.9,
+          ease: "power2.inOut",
+          transformOrigin: "center",
+        })
+      }
 
       // 9. Generic fade-up + staggered grids.
       gsap.utils.toArray<HTMLElement>(".js-fade-up").forEach((el) =>

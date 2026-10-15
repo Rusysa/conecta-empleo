@@ -1,24 +1,9 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import Link from "next/link"
 import { gsap } from "gsap"
 
-import { RollText } from "@/components/landing/roll-text"
-
-export type LandingJob = {
-  id: string
-  title: string
-  company: string
-  location: string
-  /** Filter keys this job matches: work mode slug and, for internships, "practicas". */
-  filters: string[]
-  tags: string[]
-  pay: string | null
-  initial: string
-  color: string
-  badge: "Destacada" | "Nueva" | null
-}
+import { LandingJobCard, type LandingJob } from "@/components/landing/landing-job-card"
 
 const FILTERS = [
   { key: "all", label: "Todas" },
@@ -28,8 +13,7 @@ const FILTERS = [
   { key: "practicas", label: "Prácticas" },
 ]
 
-const DARK_BACKGROUNDS = ["#fb4903", "#5c4ade"]
-
+/** Home page "Vacantes destacadas": client-side modality filter over the recent jobs. */
 export function LandingJobs({ jobs }: { jobs: LandingJob[] }) {
   const [filter, setFilter] = useState("all")
   const grid = useRef<HTMLDivElement>(null)
@@ -71,45 +55,7 @@ export function LandingJobs({ jobs }: { jobs: LandingJob[] }) {
           <p className="jobs__empty">No hay vacantes con ese filtro por ahora.</p>
         )}
         {list.map((job) => (
-          <article key={job.id} className="job">
-            <div className="job__top">
-              <span
-                className="job__logo"
-                style={{
-                  background: job.color,
-                  color: DARK_BACKGROUNDS.includes(job.color) ? "#fff" : "#000",
-                }}
-                aria-hidden
-              >
-                {job.initial}
-              </span>
-              {job.badge && <span className="job__new label">{job.badge}</span>}
-            </div>
-            <div>
-              <h3>{job.title}</h3>
-              <div className="job__co">
-                {job.company} · {job.location}
-              </div>
-            </div>
-            <div className="job__tags">
-              {job.tags.map((tag) => (
-                <span key={tag}>{tag}</span>
-              ))}
-            </div>
-            <div className="job__foot">
-              <span className="job__pay">
-                {job.pay ?? "Salario a convenir"}
-                {job.pay && <small style={{ fontWeight: 500 }}> /mes</small>}
-              </span>
-              <Link
-                className="pill pill--dark"
-                href={`/vacantes/${job.id}`}
-                aria-label={`Ver ${job.title}`}
-              >
-                <RollText>Postularme</RollText>
-              </Link>
-            </div>
-          </article>
+          <LandingJobCard key={job.id} job={job} />
         ))}
       </div>
     </>
